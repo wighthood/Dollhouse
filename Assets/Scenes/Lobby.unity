@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 1194384324}
   - component: {fileID: 1194384323}
   - component: {fileID: 1194384325}
+  - component: {fileID: 1194384326}
   m_Layer: 5
   m_Name: PlayerPanel
   m_TagString: Untagged
@@ -439,6 +440,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1194384326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194384321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6156bd3590f64f449976345a558d9bad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDisplay
+  ShowTopMostFoldoutHeaderGroup: 1
+  playerDisplay: {fileID: 7933827060262680041, guid: e75c0818e47b30a47b99f0792cbe436d, type: 3}
+  playerList: {fileID: 1194384321}
 --- !u!1 &1397156025
 GameObject:
   m_ObjectHideFlags: 0
