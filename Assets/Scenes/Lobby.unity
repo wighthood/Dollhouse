@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 1084330980}
   - component: {fileID: 1084330982}
   - component: {fileID: 1084330981}
+  - component: {fileID: 1084330983}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -322,6 +323,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084330979}
   m_CullTransparentMesh: 1
+--- !u!114 &1084330983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084330979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ebccd425b669dc41bc5c059f1095b8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisplayCode
+  ShowTopMostFoldoutHeaderGroup: 1
+  codeDisplay: {fileID: 2056053350}
 --- !u!1 &1397156025
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,7 +541,6 @@ GameObject:
   - component: {fileID: 1774342031}
   - component: {fileID: 1774342030}
   - component: {fileID: 1774342034}
-  - component: {fileID: 1774342035}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -642,20 +656,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1774342035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774342029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ebccd425b669dc41bc5c059f1095b8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DisplayCode
-  ShowTopMostFoldoutHeaderGroup: 1
-  codeDisplay: {fileID: 2056053350}
 --- !u!1 &2056053348
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,7 +667,6 @@ GameObject:
   - component: {fileID: 2056053349}
   - component: {fileID: 2056053351}
   - component: {fileID: 2056053350}
-  - component: {fileID: 2056053352}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -724,7 +723,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -793,20 +792,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2056053348}
   m_CullTransparentMesh: 1
---- !u!114 &2056053352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056053348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ebccd425b669dc41bc5c059f1095b8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DisplayCode
-  ShowTopMostFoldoutHeaderGroup: 1
-  codeDisplay: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

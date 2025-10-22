@@ -8,7 +8,13 @@ public class DisplayCode : NetworkBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        codeDisplay.text = StaticCode.GameCode;
+        if (IsHost)
+        {
+            codeDisplay.text = StaticCode.GameCode;
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
-    
 }
