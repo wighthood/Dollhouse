@@ -10,9 +10,10 @@ public class Controls : NetworkBehaviour
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     Movements movements;
-    void Start()
+
+    public override void OnNetworkSpawn()
     {
-        
+        base.OnNetworkPostSpawn();
         cam = transform.GetChild(0).GetComponent<Camera>();
         movements = GetComponent<Movements>();
         movements.cam = cam;
@@ -22,7 +23,7 @@ public class Controls : NetworkBehaviour
         }
     }
 
-    
+
     public void Move(InputAction.CallbackContext context)
     {
         if (!IsOwner)
