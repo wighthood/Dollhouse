@@ -18,8 +18,6 @@ namespace UI
         [SerializeField] private Button _joinButton;
         
         [SerializeField] private TMP_InputField inputField;
-
-        static string GameCode;
         private void Start()
         {
             _hostButton.onClick.AddListener(OnHostButtonClicked);
@@ -41,7 +39,7 @@ namespace UI
                 return;
             }
 
-            GameCode= inputField.text;
+            StaticCode.GameCode= inputField.text;
             
             SwitchToGameScene();
         }
@@ -61,7 +59,7 @@ namespace UI
             
             inputField.gameObject.SetActive(false);
             Debug.Log("Join code: " + _joinCode);
-            GameCode = _joinCode;
+            StaticCode.GameCode = _joinCode;
 
             SwitchToGameScene();
         }
