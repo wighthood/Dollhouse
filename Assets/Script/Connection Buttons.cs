@@ -109,7 +109,7 @@ namespace UI
         private void SwitchToGameScene()
         {
             NetworkManager.Singleton.SceneManager.LoadScene(
-                "GameScene",
+                "Lobby",
                 LoadSceneMode.Single);
         }
     }
