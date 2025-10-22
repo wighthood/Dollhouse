@@ -12,19 +12,27 @@ public class Controls : NetworkBehaviour
     Movements movements;
     void Start()
     {
+        
         cam = transform.GetChild(0).GetComponent<Camera>();
         movements = GetComponent<Movements>();
         movements.cam = cam;
+        if (!IsOwner)
+        {
+            cam.enabled = false;
+        }
     }
 
-
+    
     public void Move(InputAction.CallbackContext context)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         if (context.started)
         {
             Vector2 moveInput = context.ReadValue<Vector2>();
-            movements.enabled = true;
-            movements.movement=new Vector3(moveInput.x,0,moveInput.y)*movementSpeed*Time.deltaTime;;
+            MoveToServerRPC(true,moveInput);
         
             
         }
@@ -32,22 +40,58 @@ public class Controls : NetworkBehaviour
         if (context.performed)
         {
             Vector2 moveInput = context.ReadValue<Vector2>();
-            movements.movement=new Vector3(moveInput.x,0,moveInput.y)*movementSpeed*Time.deltaTime;
+            MoveToServerRPC(true,moveInput);
         }
 
         if (context.canceled)
         {
-            movements.enabled = false;
+            MoveToServerRPC(false);
         }
         
     }
 
+    [Rpc(SendTo.Server)]
+    void MoveToServerRPC(bool moving,Vector2 input=new Vector2())
+    {
+        MoveToClientRPC(moving, input);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    void MoveToClientRPC(bool moving, Vector2 input = new Vector2())
+    {
+        if (moving)
+        {
+            movements.enabled = true;
+            movements.movement = new Vector3(input.x, 0, input.y) * movementSpeed * Time.deltaTime;
+            return;
+        }
+        movements.enabled = false;
+    }
+
+
     public void Rotate(InputAction.CallbackContext context)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         Vector2 mouseMovement=context.ReadValue<Vector2>();
+        RotateToServerRPC(mouseMovement);
+        
+    }
+
+    [Rpc(SendTo.Server)]
+    void RotateToServerRPC(Vector2 input)
+    {
+        RotateToClientRPC(input);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    void RotateToClientRPC(Vector2 input)
+    {
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
-        Vector3 newRotation=actualRotation+(new Vector3(-mouseMovement.y,mouseMovement.x,0)*rotationSpeed*Time.deltaTime);
+        Vector3 newRotation=actualRotation+(new Vector3(-input.y,input.x,0)*rotationSpeed*Time.deltaTime);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
     }
-    
+
 }
