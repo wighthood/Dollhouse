@@ -23,14 +23,7 @@ public class Controls : NetworkBehaviour
             cam.enabled = false;
         }
     }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-        if(IsHost) return;
-        SceneManager.LoadScene("MainMenu");
-    }
-
+    
     public void Move(InputAction.CallbackContext context)
     {
         if (!IsOwner)
