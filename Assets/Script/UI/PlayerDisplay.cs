@@ -7,7 +7,5 @@ public class PlayerDisplay : NetworkBehaviour
 {
     [SerializeField] private Button playerDisplay;
     [SerializeField] private GameObject playersDisplay;
-    
-    
 }
 

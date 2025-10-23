@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.SceneManagement;
 
 public class Controls : NetworkBehaviour
 {
@@ -23,6 +24,12 @@ public class Controls : NetworkBehaviour
         }
     }
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if(IsHost) return;
+        SceneManager.LoadScene("MainMenu");
+    }
 
     public void Move(InputAction.CallbackContext context)
     {
