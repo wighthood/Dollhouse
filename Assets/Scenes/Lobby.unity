@@ -722,8 +722,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDisplay
   ShowTopMostFoldoutHeaderGroup: 1
-  playerDisplay: {fileID: 7933827060262680041, guid: e75c0818e47b30a47b99f0792cbe436d, type: 3}
-  playersDisplay: {fileID: 0}
+  playersDisplay: {fileID: 1194384321}
+  playerDisplayPrefab: {fileID: 8420436087621449474, guid: a9c484329b272c94b8276f6eee9b2b6e, type: 3}
 --- !u!1 &1397156025
 GameObject:
   m_ObjectHideFlags: 0
