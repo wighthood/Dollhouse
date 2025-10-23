@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class Controls : NetworkBehaviour
 {
     Camera cam;
+    PlayerInput playerInput;
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     Movements movements;
@@ -13,10 +14,12 @@ public class Controls : NetworkBehaviour
     {
         base.OnNetworkPostSpawn();
         cam = transform.GetChild(0).GetComponent<Camera>();
+        playerInput = GetComponent<PlayerInput>(); 
         movements = GetComponent<Movements>();
         movements.cam = cam;
         if (!IsOwner)
         {
+            playerInput.enabled = false;
             cam.enabled = false;
         }
     }
