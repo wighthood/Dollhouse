@@ -21,39 +21,44 @@ public class StartGame : NetworkBehaviour
         if (IsHost)
         {
             button.onClick.AddListener(SpawnPlayer);
-            button.GetComponent<TextMeshProUGUI>().text = "Start Game";
+            button.GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
             button.interactable = false;
         }
         else
         {
-            button.onClick.AddListener(IsReadyServerRpc);
-            button.GetComponent<TextMeshProUGUI>().text = "Ready";
+            button.onClick.AddListener(IsReadyServer);
+            button.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
         }
     }
 
     private void OnClientConnected(ulong obj)
     {
+        if (obj == 0) return;
         _players.Add(obj, false);
     }
     
     private void OnClientDisconnected(ulong obj)
     {
+        if (obj == 0) return;
         _players.Remove(obj);
     }
 
-    [Rpc(SendTo.Server)]
-    private void IsReadyServerRpc()
+    private void IsReadyServer()
     {
         _players[NetworkManager.Singleton.LocalClientId] = true;
-        foreach (var player in _players)
-            if (!player.Value)
-            {
-                button.interactable = false;
-                return;
-            }
-        button.interactable = true;
+        if (IsHost)
+        {
+            foreach (var player in _players)
+                if (!player.Value)
+                {
+                    button.interactable = false;
+                    return;
+                }
+
+            button.interactable = true;
+        }
     }
-    
+
     private void SpawnPlayer()
     {
         foreach (var player in NetworkManager.Singleton.ConnectedClientsList)

@@ -439,6 +439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StartGame
   ShowTopMostFoldoutHeaderGroup: 1
   playerPrefab: {fileID: 3717553578398603447, guid: 0e52e0e73b880a8489ba827b42180c24, type: 3}
+  button: {fileID: 1847678200}
 --- !u!4 &650412544
 Transform:
   m_ObjectHideFlags: 0
@@ -1169,7 +1170,7 @@ GameObject:
   - component: {fileID: 1847678201}
   - component: {fileID: 1847678200}
   m_Layer: 5
-  m_Name: test
+  m_Name: start/ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1192,8 +1193,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 300}
+  m_AnchoredPosition: {x: 800, y: -400}
+  m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1847678200
 MonoBehaviour:
@@ -1238,19 +1239,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1847678201}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 650412543}
-        m_TargetAssemblyTypeName: StartGame, Assembly-CSharp
-        m_MethodName: SpawnPlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1847678201
 MonoBehaviour:
   m_ObjectHideFlags: 0
