@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,22 +6,29 @@ using UnityEngine.InputSystem;
 public class Controls : NetworkBehaviour
 {
     Camera cam;
-    PlayerInput playerInput;
+    private PlayerInput playerInput;
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     Movements movements;
 
-    public override void OnNetworkSpawn()
+    private void Awake()
     {
-        base.OnNetworkPostSpawn();
         cam = transform.GetChild(0).GetComponent<Camera>();
         playerInput = GetComponent<PlayerInput>(); 
         movements = GetComponent<Movements>();
         movements.cam = cam;
-        if (!IsOwner)
+    }
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetPlayerPrefabRPC()
+    {
+        
+        if (IsOwner)
         {
-            playerInput.enabled = false;
-            cam.enabled = false;
+            Debug.Log(NetworkManager.Singleton.LocalClientId);
+            playerInput.enabled = true;
+            cam.enabled = true;
         }
     }
 
