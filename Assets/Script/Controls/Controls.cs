@@ -1,9 +1,6 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.SceneManagement;
 
 public class Controls : NetworkBehaviour
 {
@@ -23,7 +20,8 @@ public class Controls : NetworkBehaviour
             cam.enabled = false;
         }
     }
-    
+
+
     public void Move(InputAction.CallbackContext context)
     {
         if (!IsOwner)
