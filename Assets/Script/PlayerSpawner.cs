@@ -44,7 +44,8 @@ public class StartGame : NetworkBehaviour
         _players.Remove(obj);
         CheckReady();
     }
-    
+
+    #region ready
     private void IsReady()
     {
         IsReadyServerRpc(NetworkManager.Singleton.LocalClientId);
@@ -79,6 +80,7 @@ public class StartGame : NetworkBehaviour
         }
         IsReadyClientRpc();
     }
+    #endregion
     
     private void SpawnPlayer()
     {
