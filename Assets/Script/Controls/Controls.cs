@@ -7,6 +7,7 @@ public class Controls : NetworkBehaviour
 {
     Camera cam;
     private PlayerInput playerInput;
+    private AudioListener audioListener;
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     Movements movements;
@@ -17,6 +18,7 @@ public class Controls : NetworkBehaviour
         playerInput = GetComponent<PlayerInput>(); 
         movements = GetComponent<Movements>();
         movements.cam = cam;
+        audioListener = cam.GetComponent<AudioListener>();
     }
 
 
@@ -29,6 +31,7 @@ public class Controls : NetworkBehaviour
             Debug.Log(NetworkManager.Singleton.LocalClientId);
             playerInput.enabled = true;
             cam.enabled = true;
+            audioListener.enabled = true;
         }
     }
 
