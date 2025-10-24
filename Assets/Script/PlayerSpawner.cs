@@ -22,11 +22,11 @@ public class StartGame : NetworkBehaviour
         {
             button.onClick.AddListener(SpawnPlayer);
             button.GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
-            button.interactable = false;
+            button.interactable = true;
         }
         else
         {
-            button.onClick.AddListener(IsReadyServer);
+            button.onClick.AddListener(IsReady);
             button.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
         }
     }
@@ -35,30 +35,51 @@ public class StartGame : NetworkBehaviour
     {
         if (obj == 0) return;
         _players.Add(obj, false);
+        CheckReady();
     }
     
     private void OnClientDisconnected(ulong obj)
     {
         if (obj == 0) return;
         _players.Remove(obj);
+        CheckReady();
+    }
+    
+    private void IsReady()
+    {
+        IsReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
-    private void IsReadyServer()
+    [Rpc(SendTo.Server)]
+    private void IsReadyServerRpc(ulong clientId)
     {
-        _players[NetworkManager.Singleton.LocalClientId] = true;
+        _players[clientId] = !_players[clientId];
+        CheckReady();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void IsReadyClientRpc(bool allReady = true)
+    {
         if (IsHost)
+        {
+            button.interactable = allReady;
+        }
+    }
+
+    private void CheckReady()
+    {
+        if (_players.Count > 0)
         {
             foreach (var player in _players)
                 if (!player.Value)
                 {
-                    button.interactable = false;
+                    IsReadyClientRpc(false);
                     return;
                 }
-
-            button.interactable = true;
         }
+        IsReadyClientRpc();
     }
-
+    
     private void SpawnPlayer()
     {
         foreach (var player in NetworkManager.Singleton.ConnectedClientsList)

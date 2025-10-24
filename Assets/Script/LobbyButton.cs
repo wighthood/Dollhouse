@@ -8,11 +8,4 @@ public class LobbyButton : NetworkBehaviour
         NetworkManager.Singleton.Shutdown();
         SceneManager.LoadScene("MainMenu");
     }
-
-    public void SwitchToGameScene()
-    {
-        
-    }
-    
-    
 }
