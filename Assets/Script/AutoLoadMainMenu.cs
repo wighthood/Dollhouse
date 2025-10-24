@@ -9,5 +9,4 @@ public class AutoLoadMainMenu : NetworkBehaviour
         if(IsHost) return;
         SceneManager.LoadScene("MainMenu");
     }
-
 }

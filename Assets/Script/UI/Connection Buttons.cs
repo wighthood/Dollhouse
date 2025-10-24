@@ -10,9 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UI
-{
-    public class ConnectionButton : MonoBehaviour
+public class ConnectionButton : MonoBehaviour
     {
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _joinButton;
@@ -27,18 +25,9 @@ namespace UI
         }
 
         public async void OnJoinButtonClicked()
-        {
-            _hostButton.interactable = false;
-            _joinButton.interactable = false;
-            bool _isConnected = await StartClientWithRelay(inputField.text, "udp");
-
-            if (!_isConnected)
-            {
-                _hostButton.interactable = true;
-                _joinButton.interactable = true;
-                return;
-            }
-
+        { 
+            await StartClientWithRelay(inputField.text, "udp");
+            
             StaticCode.GameCode= inputField.text;
             
             SwitchToGameScene();
@@ -46,40 +35,29 @@ namespace UI
 
         public async void OnHostButtonClicked()
         {
-            _hostButton.interactable = false;
-            _joinButton.interactable = false;
-            string _joinCode = await StartHostWithRelay(15, "udp");
-            
-            if (string.IsNullOrEmpty(_joinCode))
-            {
-                _hostButton.interactable = true;
-                _joinButton.interactable = true;
-                return;
-            }
-            
+            string joinCode = await StartHostWithRelay(15, "udp");
             inputField.gameObject.SetActive(false);
-            Debug.Log("Join code: " + _joinCode);
-            StaticCode.GameCode = _joinCode;
-
+            StaticCode.GameCode = joinCode;
+            Debug.Log(joinCode);
             SwitchToGameScene();
         }
 
-        private async Task<string> StartHostWithRelay(int _maxConnections, string _connectionType)
+        private async Task<string> StartHostWithRelay(int maxConnections, string connectionType)
         {
             await UnityServices.InitializeAsync();
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync(); //Todo: handle sign in elsewhere && not anonymously
             }
-            var _allocation = await RelayService.Instance.CreateAllocationAsync(_maxConnections);
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(_allocation.ToRelayServerData(_connectionType));
-            var _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
-            return NetworkManager.Singleton.StartHost() ? _joinCode : null;
+            var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(allocation.ToRelayServerData(connectionType));
+            var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            return NetworkManager.Singleton.StartHost() ? joinCode : null;
         }
 
-        private async Task<bool> StartClientWithRelay(string _joinCode, string _connectionType)
+        private async Task<bool> StartClientWithRelay(string joinCode, string connectionType)
         {
-            if (string.IsNullOrEmpty(_joinCode))
+            if (string.IsNullOrEmpty(joinCode))
             {
                 Debug.LogError("Join code is null or empty");
                 return false;
@@ -93,22 +71,22 @@ namespace UI
 
             try
             {
-                var _allocation = await RelayService.Instance.JoinAllocationAsync(joinCode: _joinCode);
-                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(_allocation.ToRelayServerData(_connectionType));
+                var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode: joinCode);
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(allocation.ToRelayServerData(connectionType));
             }
             catch (RelayServiceException e)
             {
                 Debug.LogError($"Relay join failed: {e.Message}");
                 return false;
             }
-            return !string.IsNullOrEmpty(_joinCode) && NetworkManager.Singleton.StartClient();
+            return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
         }
 
         private void SwitchToGameScene()
         {
+            if (!NetworkManager.Singleton.IsHost) return;
             NetworkManager.Singleton.SceneManager.LoadScene(
                 "Lobby",
-                LoadSceneMode.Single);
+                LoadSceneMode.Single); 
         }
     }
-}
