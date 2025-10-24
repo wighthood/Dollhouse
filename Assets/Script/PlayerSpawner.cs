@@ -93,7 +93,7 @@ public class StartGame : NetworkBehaviour
         
         LoadGame();
     }
-
+    
     void LoadGame()
     {
         NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);

@@ -25,18 +25,9 @@ public class ConnectionButton : MonoBehaviour
         }
 
         public async void OnJoinButtonClicked()
-        {
-            _hostButton.interactable = false;
-            _joinButton.interactable = false;
-            bool isConnected = await StartClientWithRelay(inputField.text, "udp");
-
-            if (!isConnected)
-            {
-                _hostButton.interactable = true;
-                _joinButton.interactable = true;
-                return;
-            }
-
+        { 
+            await StartClientWithRelay(inputField.text, "udp");
+            
             StaticCode.GameCode= inputField.text;
             
             SwitchToGameScene();
@@ -44,21 +35,10 @@ public class ConnectionButton : MonoBehaviour
 
         public async void OnHostButtonClicked()
         {
-            _hostButton.interactable = false;
-            _joinButton.interactable = false;
             string joinCode = await StartHostWithRelay(15, "udp");
-            
-            if (string.IsNullOrEmpty(joinCode))
-            {
-                _hostButton.interactable = true;
-                _joinButton.interactable = true;
-                return;
-            }
-            
             inputField.gameObject.SetActive(false);
-            Debug.Log("Join code: " + joinCode);
             StaticCode.GameCode = joinCode;
-
+            Debug.Log(joinCode);
             SwitchToGameScene();
         }
 
