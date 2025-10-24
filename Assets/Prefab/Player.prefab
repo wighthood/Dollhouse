@@ -419,7 +419,7 @@ GameObject:
   - component: {fileID: 346104851238261963}
   - component: {fileID: 3640069879818805574}
   - component: {fileID: 3061337593879410559}
-  - component: {fileID: 8236488798699960932}
+  - component: {fileID: 1615003962688883369}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -537,11 +537,11 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &8236488798699960932
+--- !u!81 &1615003962688883369
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9002945206672970496}
-  m_Enabled: 0
+  m_Enabled: 1
