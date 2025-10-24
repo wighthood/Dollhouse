@@ -6,7 +6,7 @@ public class AutoLoadMainMenu : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        if(IsHost) return;
+        if(IsHost|| !IsOwner) return;
         SceneManager.LoadScene("MainMenu");
     }
 }
