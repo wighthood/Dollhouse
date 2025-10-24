@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2358791981362663064}
   - component: {fileID: 2352767566641254101}
   - component: {fileID: 8089224948849558759}
+  - component: {fileID: 4928056914896767241}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -394,6 +395,19 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   movementSpeed: 5
   rotationSpeed: 5
+--- !u!114 &4928056914896767241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3717553578398603447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c0d14520f8d6a842ac5ce0e5ec8090b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoLoadMainMenu
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &9002945206672970496
 GameObject:
   m_ObjectHideFlags: 0
