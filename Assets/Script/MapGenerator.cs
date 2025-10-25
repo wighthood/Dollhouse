@@ -15,13 +15,14 @@ public class MapGenerator : NetworkBehaviour
         GenerateMap(root);
         Debug.Log(root.name);
         Debug.Log(root.childs.Count);
-        Node Test = root;
-        while (Test.childs.Count > 0)
+        Node test = root;
+        while (test.childs.Count > 0)
         {
-            Debug.Log(Test.name);
-            Test = Test.childs[0];
+            Debug.Log(test.name);
+            test = test.childs[0];
         }
     }
+    
 /// <summary>
 /// generate new doors and update the total number of doors
 /// </summary>
@@ -31,47 +32,47 @@ public class MapGenerator : NetworkBehaviour
 /// <returns>
 /// Returns the number of newly generated doors
 /// </returns>
-    int GenerateDoors(ref int totalPortes)
+    int GenerateDoors(ref int totalDoors)
     {
         int generatedDoors;
         generatedDoors=Random.Range(0,4);
-        totalPortes += generatedDoors;
+        totalDoors += generatedDoors;
         
         return generatedDoors;
     }
 
-    void GenerateMap(Node noeud,int nbPortes=0, int totalPortes=0, int nbMaxSalles=20, int nbSalle=0)
+    void GenerateMap(Node node,int nbDoors=0, int totalDoors=0, int nbMaxRoom=20, int nbRoom=0)
     {
-        if (noeud.parent == null)
+        if (node.parent == null)
         {
-            nbPortes=GenerateDoors(ref totalPortes);
+            nbDoors=GenerateDoors(ref totalDoors);
         }
 
-        for (int i = 0; i < nbPortes; i++)
+        for (int i = 0; i < nbDoors; i++)
         {
-            if (nbSalle >= nbMaxSalles)
+            if (nbRoom >= nbMaxRoom)
             {
                 return;
             }
             //generer salle
             Node newChild=new Node();
-            newChild.parent=noeud;
-            noeud.childs.Add(newChild);
-            nbSalle++;
-            newChild.name ="Salle"+nbSalle;
+            newChild.parent=node;
+            node.childs.Add(newChild);
+            nbRoom++;
+            newChild.name ="Salle"+nbRoom;
             nodes.Add(newChild);
-            totalPortes -= 1;
+            totalDoors -= 1;
             if (Random.Range(0, 2)==0)
             {
                 return;
             }
 
-            nbPortes = GenerateDoors(ref totalPortes);
-            if (nbSalle + totalPortes > nbMaxSalles)
+            nbDoors = GenerateDoors(ref totalDoors);
+            if (nbRoom + totalDoors > nbMaxRoom)
             {
-                nbPortes=nbSalle+totalPortes-nbMaxSalles;
+                nbDoors=nbRoom+totalDoors-nbMaxRoom;
             }
-            GenerateMap(newChild,nbPortes,totalPortes,nbMaxSalles,nbSalle);
+            GenerateMap(newChild,nbDoors, totalDoors, nbMaxRoom, nbRoom);
         }
     }
     
