@@ -27,7 +27,7 @@ public class LobbyButton : NetworkBehaviour
         DisconnectClientRpc();
     }
     
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void DisconnectClientRpc()
     {
         TrueDisconnect();

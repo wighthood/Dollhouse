@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerDisplay : NetworkBehaviour
 {
@@ -48,6 +49,10 @@ public class PlayerDisplay : NetworkBehaviour
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
             var display = Instantiate(playerDisplayPrefab, playersDisplay.transform);
+            if (client.ClientId == 0)
+            {
+                display.GetComponentInChildren<Image>().color = Color.green;
+            }
             display.GetComponent<TextMeshProUGUI>().text = "player : " + client.ClientId;
         }
     }
