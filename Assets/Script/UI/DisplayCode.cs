@@ -11,7 +11,7 @@ public class DisplayCode : NetworkBehaviour
     {
         if (IsHost)
         {
-            NetworkManager.Singleton.ConnectionApprovalCallback += LimitPLayerAmount;
+            NetworkManager.Singleton.ConnectionApprovalCallback = LimitPLayerAmount;
         }
         codeDisplay.text = StaticCode.GameCode;
     }
