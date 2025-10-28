@@ -18,7 +18,8 @@ public class StartGame : NetworkBehaviour
     [SerializeField] private GameObject playerDisplayPrefab;
         
     
-    private Dictionary<ulong, bool> _players = new();
+    private List<ulong> PlayersID = new();
+    private List<bool> PlayersReady = new();
     private Dictionary<ulong, GameObject> _displays = new();
     
     private void Start()
@@ -42,17 +43,19 @@ public class StartGame : NetworkBehaviour
     private void OnClientConnected(ulong obj)
     {
         if (obj == 0) return;
-        _players.Add(obj, false);
+        PlayersID.Add(obj);
+        PlayersReady.Add(false);
         if (IsServer) UpdatePlayerDisplaysClientRpc();
-        CheckReadyClientRpc(obj);
+        CheckReady(obj);
     }
     
     private void OnClientDisconnected(ulong obj)
     {
         if (obj == 0) return;
-        _players.Remove(obj);
+        PlayersID.Remove(obj);
+        PlayersReady.RemoveAt((int)obj);
         if (IsServer) UpdatePlayerDisplaysClientRpc();
-        CheckReadyClientRpc(obj);
+        CheckReady(obj);
     }
 
     #region ready
@@ -64,36 +67,34 @@ public class StartGame : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void IsReadyServerRpc(ulong clientId)
     {
-        _players[clientId] = !_players[clientId];
-        CheckReadyClientRpc(clientId);    
+        PlayersReady[(int)clientId-1] = !PlayersReady[(int)clientId-1];
+        CheckReady(clientId);    
     }
     
-    private void Is_Ready(bool allReady = true, ulong clientId = 0)
+    [Rpc(SendTo.ClientsAndHost)]
+    private void IsReadyClientRpc(bool allReady, ulong clientId,bool ready)
     {
-        foreach (var VARIABLE in _displays)
-        {
-            Debug.Log(VARIABLE.Key);
-        }
-        _displays[clientId].GetComponentInChildren<Image>().color = _players[clientId] ? Color.green : Color.red;
+        _displays[clientId].GetComponentInChildren<Image>().color = ready ? Color.green : Color.red;
         if (IsHost)
         {
             button.interactable = allReady;
         }
     }
     
-    [Rpc(SendTo.ClientsAndHost)]
-    private void CheckReadyClientRpc(ulong clientId = 0)
+    private void CheckReady(ulong clientId = 0)
     {
-        if (_players.Count > 0)
+        if (PlayersReady.Count > 0)
         {
-            foreach (var player in _players)
-                if (!player.Value)
+            for (int i = 0; i < PlayersReady.Count; i++)
+            {
+                if (!PlayersReady[i])
                 {
-                    Is_Ready(false,player.Key);
+                    IsReadyClientRpc(false,PlayersID[i], PlayersReady[i]);
                     return;
                 }
+            }
         }
-        Is_Ready(true,clientId);
+        IsReadyClientRpc(true,clientId,PlayersReady[(int)clientId-1]);
     }
     #endregion
     
