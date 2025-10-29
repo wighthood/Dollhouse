@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Controls : NetworkBehaviour
 {
@@ -17,6 +19,9 @@ public class Controls : NetworkBehaviour
 
     [Header("screenshot")]
     [SerializeField] private GameObject photoPrefab;
+    [SerializeField] private int maxPhotos=10;
+    [SerializeField] private GameObject PhotoHolder;
+    private List<Texture2D> photos = new();
     
     private void Awake()
     {
@@ -72,7 +77,7 @@ public class Controls : NetworkBehaviour
         }
         
     }
-
+    
     [Rpc(SendTo.Server)]
     void MoveToServerRPC(bool moving,Vector2 input=new Vector2())
     {
@@ -103,9 +108,16 @@ public class Controls : NetworkBehaviour
 
     IEnumerator Screenshot(int width, int height)
     {
+        PhotoHolder.SetActive(false);
         yield return new WaitForEndOfFrame();
         Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        tex.Apply();
+        PhotoHolder.SetActive(true);
+        photos.Add(tex);
+        Instantiate(photoPrefab,PhotoHolder.transform,false).
+            GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height),
+            new Vector2(0.5f, 0.5f));
         byte[] bytes = tex.EncodeToJPG();
         TakeScreenshotServerRPC(bytes,transform.position,transform.rotation);
     }
@@ -121,13 +133,13 @@ public class Controls : NetworkBehaviour
     {
         Texture2D tex = new Texture2D(2, 2);
         tex.LoadImage(PNG);
-        GameObject newPhoto = Instantiate(photoPrefab,position,rotation);
-        newPhoto.GetComponent<Renderer>().material.mainTexture = tex;
+        //GameObject newPhoto = Instantiate(photoPrefab,position,rotation);
+        //newPhoto.GetComponent<Renderer>().material.mainTexture = tex;
     }
     
     public void TakeScreenshot(InputAction.CallbackContext context)
     {
-        if(IsOwner && !Menu.activeSelf && context.started)
+        if(IsOwner && !Menu.activeSelf && context.started && photos.Count < maxPhotos)
         {
             StartCoroutine(Screenshot(Screen.width, Screen.height));
         }
