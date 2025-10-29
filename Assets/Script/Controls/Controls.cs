@@ -2,7 +2,6 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class Controls : NetworkBehaviour
 {
@@ -92,8 +91,7 @@ public class Controls : NetworkBehaviour
         }
         movements.enabled = false;
     }
-
-
+    
     public void Rotate(InputAction.CallbackContext context)
     {
         if (!IsOwner || Menu.activeSelf)
@@ -102,30 +100,37 @@ public class Controls : NetworkBehaviour
         }
         Vector2 mouseMovement=context.ReadValue<Vector2>();
         RotateToServerRPC(mouseMovement);
-        
     }
 
-    IEnumerator Screenshot()
+    IEnumerator Screenshot(int width, int height)
     {
         yield return new WaitForEndOfFrame();
-        int width = Screen.width;
-        int height= Screen.height;
         Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-            
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-        tex.Apply();
-            
-        GameObject newphoto = Instantiate(photoPrefab,transform.position,transform.rotation);
-        newphoto.GetComponent<Renderer>().material.mainTexture = tex;
+        byte[] bytes = tex.EncodeToJPG();
+        TakeScreenshotServerRPC(bytes,transform.position,transform.rotation);
     }
-    
-    
+
+    [Rpc(SendTo.Server)]
+    private void TakeScreenshotServerRPC(byte[] PNG,Vector3 position, Quaternion rotation)
+    {
+        TakeScreenshotClientRPC(PNG,position, rotation);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)] 
+    private void TakeScreenshotClientRPC(byte[] PNG,Vector3 position, Quaternion rotation)
+    {
+        Texture2D tex = new Texture2D(2, 2);
+        tex.LoadImage(PNG);
+        GameObject newPhoto = Instantiate(photoPrefab,position,rotation);
+        newPhoto.GetComponent<Renderer>().material.mainTexture = tex;
+    }
     
     public void TakeScreenshot(InputAction.CallbackContext context)
     {
-        if(IsOwner && !Menu.activeSelf)
+        if(IsOwner && !Menu.activeSelf && context.started)
         {
-            StartCoroutine(Screenshot());
+            StartCoroutine(Screenshot(Screen.width, Screen.height));
         }
     }
     
