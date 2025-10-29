@@ -1,20 +1,27 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class Controls : NetworkBehaviour
 {
     Camera cam;
     private PlayerInput playerInput;
     private AudioListener audioListener;
+    [SerializeField] private GameObject Menu;
+    
+    [Header("movement")]
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
-    [SerializeField] private GameObject Menu;
     Movements movements;
 
+    [Header("screenshot")]
+    [SerializeField] private GameObject photoPrefab;
+    
     private void Awake()
     {
-        cam = transform.GetChild(0).GetComponent<Camera>();
+        cam = transform.GetComponentInChildren<Camera>();
         playerInput = GetComponent<PlayerInput>(); 
         movements = GetComponent<Movements>();
         movements.cam = cam;
@@ -98,6 +105,30 @@ public class Controls : NetworkBehaviour
         
     }
 
+    IEnumerator Screenshot()
+    {
+        yield return new WaitForEndOfFrame();
+        int width = Screen.width;
+        int height= Screen.height;
+        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+            
+        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        tex.Apply();
+            
+        GameObject newphoto = Instantiate(photoPrefab,transform.position,transform.rotation);
+        newphoto.GetComponent<Renderer>().material.mainTexture = tex;
+    }
+    
+    
+    
+    public void TakeScreenshot(InputAction.CallbackContext context)
+    {
+        if(IsOwner && !Menu.activeSelf)
+        {
+            StartCoroutine(Screenshot());
+        }
+    }
+    
     [Rpc(SendTo.Server)]
     void RotateToServerRPC(Vector2 input)
     {
