@@ -34,7 +34,6 @@ public class Controls : NetworkBehaviour
         
         if (IsOwner)
         {
-            Debug.Log(NetworkManager.Singleton.LocalClientId);
             playerInput.enabled = true;
             cam.enabled = true;
             audioListener.enabled = true;
@@ -144,7 +143,9 @@ public class Controls : NetworkBehaviour
     void RotateToClientRPC(Vector2 input)
     {
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
-        Vector3 newRotation=actualRotation+(new Vector3(-input.y,input.x,0)*rotationSpeed*Time.deltaTime);
+        Vector3 newRotation=actualRotation+new Vector3(-input.y,input.x,0)*rotationSpeed*Time.deltaTime;
+        if (newRotation.x>180f) newRotation.x-=360f;
+        newRotation.x=Mathf.Clamp(newRotation.x,-90f,90f);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
     }
 
