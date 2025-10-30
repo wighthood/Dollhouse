@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -21,7 +22,10 @@ public class Controls : NetworkBehaviour
     [SerializeField] private GameObject photoPrefab;
     [SerializeField] private int maxPhotos=10;
     [SerializeField] private GameObject PhotoHolder;
+    [SerializeField] private GameObject Selector;
     private List<Texture2D> photos = new();
+    private List<GameObject> photoInstances = new();
+
     
     private void Awake()
     {
@@ -31,8 +35,7 @@ public class Controls : NetworkBehaviour
         movements.cam = cam;
         audioListener = cam.GetComponent<AudioListener>();
     }
-
-
+    
     [Rpc(SendTo.ClientsAndHost)]
     public void SetPlayerPrefabRPC()
     {
@@ -61,8 +64,6 @@ public class Controls : NetworkBehaviour
         {
             Vector2 moveInput = context.ReadValue<Vector2>();
             MoveToServerRPC(true,moveInput);
-        
-            
         }
 
         if (context.performed)
@@ -106,6 +107,8 @@ public class Controls : NetworkBehaviour
         RotateToServerRPC(mouseMovement);
     }
 
+    
+    
     IEnumerator Screenshot(int width, int height)
     {
         PhotoHolder.SetActive(false);
@@ -115,9 +118,14 @@ public class Controls : NetworkBehaviour
         tex.Apply();
         PhotoHolder.SetActive(true);
         photos.Add(tex);
-        Instantiate(photoPrefab,PhotoHolder.transform,false).
-            GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height),
-            new Vector2(0.5f, 0.5f));
+        photoInstances.Add(Instantiate(photoPrefab, PhotoHolder.transform, false));
+        photoInstances[0].GetComponentInChildren<Image>().sprite =
+            Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        if (photoInstances.Count == 1)
+        {
+            Selector.SetActive(true);
+            Selector.transform.position = photoInstances[0].transform.localPosition;
+        }
         byte[] bytes = tex.EncodeToJPG();
         TakeScreenshotServerRPC(bytes,transform.position,transform.rotation);
     }
