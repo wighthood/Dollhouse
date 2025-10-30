@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +9,7 @@ public class Controls : NetworkBehaviour
     private AudioListener audioListener;
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
+    [SerializeField] private GameObject Menu;
     Movements movements;
 
     private void Awake()
@@ -35,10 +35,15 @@ public class Controls : NetworkBehaviour
         }
     }
 
+    public void OpenMenu(InputAction.CallbackContext context)
+    {
+        if (!IsOwner) return;
+        Menu.SetActive(!Menu.activeSelf);
+    }
 
     public void Move(InputAction.CallbackContext context)
     {
-        if (!IsOwner)
+        if (!IsOwner || Menu.activeSelf)
         {
             return;
         }
@@ -84,7 +89,7 @@ public class Controls : NetworkBehaviour
 
     public void Rotate(InputAction.CallbackContext context)
     {
-        if (!IsOwner)
+        if (!IsOwner || Menu.activeSelf)
         {
             return;
         }

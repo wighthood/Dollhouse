@@ -1,7 +1,6 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class DisplayCode : NetworkBehaviour
 {
@@ -12,13 +11,9 @@ public class DisplayCode : NetworkBehaviour
     {
         if (IsHost)
         {
-            NetworkManager.Singleton.ConnectionApprovalCallback += LimitPLayerAmount;
-            codeDisplay.text = StaticCode.GameCode;
+            NetworkManager.Singleton.ConnectionApprovalCallback = LimitPLayerAmount;
         }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        codeDisplay.text = StaticCode.GameCode;
     }
     
     private void LimitPLayerAmount(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)

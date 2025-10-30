@@ -89,4 +89,9 @@ public class ConnectionButton : MonoBehaviour
                 "Lobby",
                 LoadSceneMode.Single); 
         }
+
+        public void Quit()
+        {
+            Application.Quit();
+        }
     }
