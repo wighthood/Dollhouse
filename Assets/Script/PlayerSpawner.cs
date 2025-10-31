@@ -54,8 +54,8 @@ public class StartGame : NetworkBehaviour
         if (obj == 0) return;
         PlayersID.Remove(obj);
         PlayersReady.RemoveAt((int)obj-1);
-        if (IsServer) UpdatePlayerDisplaysClientRpc();
         CheckReady(obj);
+        if (IsServer) UpdatePlayerDisplaysClientRpc();
     }
 
     #region ready
@@ -72,9 +72,12 @@ public class StartGame : NetworkBehaviour
     }
     
     [Rpc(SendTo.ClientsAndHost)]
-    private void IsReadyClientRpc(bool allReady, ulong clientId,bool ready)
+    private void IsReadyClientRpc(bool allReady, ulong clientId = 0,bool ready = false)
     {
-        _displays[clientId].GetComponentInChildren<Image>().color = ready ? Color.green : Color.red;
+        if (clientId != 0)
+        {
+            _displays[clientId].GetComponentInChildren<Image>().color = ready ? Color.green : Color.red;
+        }
         if (IsHost)
         {
             button.interactable = allReady;
@@ -94,7 +97,7 @@ public class StartGame : NetworkBehaviour
                 }
             }
         }
-        IsReadyClientRpc(true,clientId,PlayersReady[(int)clientId-1]);
+        IsReadyClientRpc(true);
     }
     #endregion
     

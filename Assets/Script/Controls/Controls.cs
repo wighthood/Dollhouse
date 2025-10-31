@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class Controls : NetworkBehaviour
 {
@@ -13,19 +9,9 @@ public class Controls : NetworkBehaviour
     private AudioListener audioListener;
     [SerializeField] private GameObject Menu;
     
-    [Header("movement")]
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     Movements movements;
-
-    [Header("screenshot")]
-    [SerializeField] private GameObject photoPrefab;
-    [SerializeField] private int maxPhotos=10;
-    [SerializeField] private GameObject PhotoHolder;
-    [SerializeField] private GameObject Selector;
-    private List<Texture2D> photos = new();
-    private List<GameObject> photoInstances = new();
-
     
     private void Awake()
     {
@@ -107,52 +93,6 @@ public class Controls : NetworkBehaviour
         RotateToServerRPC(mouseMovement);
     }
 
-    
-    
-    IEnumerator Screenshot(int width, int height)
-    {
-        PhotoHolder.SetActive(false);
-        yield return new WaitForEndOfFrame();
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-        tex.Apply();
-        PhotoHolder.SetActive(true);
-        photos.Add(tex);
-        photoInstances.Add(Instantiate(photoPrefab, PhotoHolder.transform, false));
-        photoInstances[0].GetComponentInChildren<Image>().sprite =
-            Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        if (photoInstances.Count == 1)
-        {
-            Selector.SetActive(true);
-            Selector.transform.position = photoInstances[0].transform.localPosition;
-        }
-        byte[] bytes = tex.EncodeToJPG();
-        TakeScreenshotServerRPC(bytes,transform.position,transform.rotation);
-    }
-
-    [Rpc(SendTo.Server)]
-    private void TakeScreenshotServerRPC(byte[] PNG,Vector3 position, Quaternion rotation)
-    {
-        TakeScreenshotClientRPC(PNG,position, rotation);
-    }
-
-    [Rpc(SendTo.ClientsAndHost)] 
-    private void TakeScreenshotClientRPC(byte[] PNG,Vector3 position, Quaternion rotation)
-    {
-        Texture2D tex = new Texture2D(2, 2);
-        tex.LoadImage(PNG);
-        //GameObject newPhoto = Instantiate(photoPrefab,position,rotation);
-        //newPhoto.GetComponent<Renderer>().material.mainTexture = tex;
-    }
-    
-    public void TakeScreenshot(InputAction.CallbackContext context)
-    {
-        if(IsOwner && !Menu.activeSelf && context.started && photos.Count < maxPhotos)
-        {
-            StartCoroutine(Screenshot(Screen.width, Screen.height));
-        }
-    }
-    
     [Rpc(SendTo.Server)]
     void RotateToServerRPC(Vector2 input)
     {
@@ -163,10 +103,12 @@ public class Controls : NetworkBehaviour
     void RotateToClientRPC(Vector2 input)
     {
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
-        Vector3 newRotation=actualRotation+new Vector3(-input.y,input.x,0)*rotationSpeed*Time.deltaTime;
+        Vector3 newRotation=actualRotation+new Vector3(-input.y,0,0)*rotationSpeed*Time.deltaTime;
         if (newRotation.x>180f) newRotation.x-=360f;
         newRotation.x=Mathf.Clamp(newRotation.x,-90f,90f);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
+        actualRotation=transform.rotation.eulerAngles;
+        newRotation = actualRotation+new Vector3(0,input.x,0)*rotationSpeed*Time.deltaTime;
+        transform.rotation = Quaternion.Euler(newRotation);
     }
-
 }
