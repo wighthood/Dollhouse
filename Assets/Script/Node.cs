@@ -21,9 +21,8 @@ public enum DoorState
 [Serializable]
 public class Node
 {
-    public Node(GameObject prefab)
+    public Node()
     {
-        nodeObject=prefab;
         entryIsOpen.Add(Entries.Up,DoorState.Closed);
         entryIsOpen.Add(Entries.Right,DoorState.Closed);
         entryIsOpen.Add(Entries.Down,DoorState.Closed);

@@ -19,19 +19,59 @@ public class MapGenerator : NetworkBehaviour
     RoomDoorsRef NodeCube;
     
     private Node root;
-    
-    
-    Dictionary<Entries,Vector2> EntriesPosValues = new Dictionary<Entries,Vector2>();
+
+
+    private Dictionary<Entries, Vector2> EntriesPosValues = new Dictionary<Entries, Vector2>();
+    private GeneratedDoorData[] roomData;
 
 
     private void Start()
+    {
+        roomData=new GeneratedDoorData[maxNbRoom];
+        if (IsServer)
+        {
+            GenerateMapServerRPC();
+            for (int i = 0; i < maxNbRoom; i++)
+            {
+                roomData[i].pos = nodes[i].nodePos;
+                for (int j = 0; j < 4; j++)
+                {
+                    if (nodes[i].entryIsOpen[(Entries)j] == DoorState.Open)
+                    {
+                        roomData[i].entriesStates[j] = false;
+                    }
+                    else
+                    {
+                        roomData[i].entriesStates[j] = true;
+                    }
+                }
+            }
+            CreateRoomsRPC(roomData);
+        }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    void CreateRoomsRPC(GeneratedDoorData[] data)
+    {
+        roomData = data;
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
+            nodes[i].nodeObject=newRoom;
+            nodes[i].nodeObject.transform.position+=new Vector3(nodes[i].nodePos.x,0,nodes[i].nodePos.y);
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    void GenerateMapServerRPC()
     {
         EntriesPosValues.Add(Entries.Up, Vector2.up);
         EntriesPosValues.Add(Entries.Right, Vector2.right);
         EntriesPosValues.Add(Entries.Down, Vector2.down);
         EntriesPosValues.Add(Entries.Left, Vector2.left);
 
-        root = new Node(NodeCube.gameObject);
+        root = new Node();
+        root.nodeObject=NodeCube.gameObject;
         root.name = "root";
         nodes.Add(root);
         root.entryIsOpen[Entries.Down] = DoorState.Stucked;
@@ -56,7 +96,8 @@ public class MapGenerator : NetworkBehaviour
         }
     }
 
-
+    
+    
 
     void GenerateMap(Node node,Vector3 pos, Entries entrance, Color colour)
     {
@@ -132,9 +173,8 @@ public class MapGenerator : NetworkBehaviour
             nbRoom++;
             
             //generer salle
-            GameObject newRoom=Instantiate(NodeCube.gameObject, pos, Quaternion.identity);
-            newRoom.name = "Room " + nbRoom;
-            Node newChild = new Node(newRoom);
+            
+            Node newChild = new Node();
             newChild.parent = node;
             newChild.entryIsOpen[FindOppositeDoor((int)currentEntry.Key)] = DoorState.Open;
             //newChild.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(FindOppositeDoor((int)currentEntry.Key),DoorState.Open);
@@ -142,9 +182,10 @@ public class MapGenerator : NetworkBehaviour
             node.childs.Add(newChild);
             newChild.name = "Salle" + nbRoom;
             newChild.nodePos = node.nodePos + EntriesPosValues[currentEntry.Key];
+            newChild.nodePos*=NodeCube.roomSize;
             nodes.Add(newChild);
             dunemaniereouduneautre.Add(newChild.nodePos);
-            newChild.nodeObject.transform.position+=new Vector3(newChild.nodePos.x,0,newChild.nodePos.y)*NodeCube.roomSize;
+           
             //newChild.nodeObject.GetComponent<MeshRenderer>().material.color = colour;
             GenerateMap(newChild,pos, FindOppositeDoor(i), colour);
             
@@ -286,7 +327,7 @@ public class MapGenerator : NetworkBehaviour
     }
     Node NodeParkour(Node node)
     {
-        Node a = new Node(NodeCube.gameObject);
+        Node a = new Node();
         if (node.childs.Count > 0)
         {
             foreach (Node child in node.childs)
