@@ -74,10 +74,8 @@ public class StartGame : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void IsReadyClientRpc(bool allReady, ulong clientId = 0,bool ready = false)
     {
-        if (clientId != 0)
-        {
-            _displays[clientId].GetComponentInChildren<Image>().color = ready ? Color.green : Color.red;
-        }
+        Debug.Log(clientId);
+        _displays[clientId].GetComponentInChildren<Image>().color = ready ? Color.green : Color.red;
         if (IsHost)
         {
             button.interactable = allReady;
@@ -92,7 +90,8 @@ public class StartGame : NetworkBehaviour
             {
                 if (!PlayersReady[i])
                 {
-                    IsReadyClientRpc(false,PlayersID[i], PlayersReady[i]);
+                    Debug.Log(PlayersID[i+1]);
+                    IsReadyClientRpc(false,PlayersID[i+1], PlayersReady[i]);
                     return;
                 }
             }
