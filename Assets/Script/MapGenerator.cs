@@ -16,53 +16,47 @@ public class MapGenerator : NetworkBehaviour
     List<Vector2> dunemaniereouduneautre = new List<Vector2>();
 
     [SerializeField]
-    GameObject NodeCube;
+    RoomDoorsRef NodeCube;
     
     private Node root;
     
-    Dictionary<Entries,Vector2> EntriesPosValues = new Dictionary<Entries,Vector2>(); 
+    
+    Dictionary<Entries,Vector2> EntriesPosValues = new Dictionary<Entries,Vector2>();
 
 
     private void Start()
     {
-        EntriesPosValues.Add(Entries.Up,Vector2.up);
-        EntriesPosValues.Add(Entries.Right,Vector2.right);
-        EntriesPosValues.Add(Entries.Down,Vector2.down);
-        EntriesPosValues.Add(Entries.Left,Vector2.left);
-        
-        root=new Node(NodeCube);
+        EntriesPosValues.Add(Entries.Up, Vector2.up);
+        EntriesPosValues.Add(Entries.Right, Vector2.right);
+        EntriesPosValues.Add(Entries.Down, Vector2.down);
+        EntriesPosValues.Add(Entries.Left, Vector2.left);
+
+        root = new Node(NodeCube.gameObject);
         root.name = "root";
         nodes.Add(root);
-        root.entryIsOpen[Entries.Down]=DoorState.Stucked;
+        root.entryIsOpen[Entries.Down] = DoorState.Stucked;
+        root.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(Entries.Down, DoorState.Stucked);
         dunemaniereouduneautre.Add(root.nodePos);
-        Color b=Color.black;
-        
+        Color b = Color.black;
+
+
         while (nbRoom < maxNbRoom)
         {
-            GenerateMap(root, NodeCube.transform.position, Entries.Down,b);
+            GenerateMap(root, NodeCube.transform.position, Entries.Down, b);
             b.r += .2f;
+
         }
 
-        int offset = 5;
         for (int i = 0; i < nodes.Count; i++)
         {
-            if (nodes[i].parent == null)
+            foreach (var entry in nodes[i].entryIsOpen)
             {
-                continue;
-            }
-
-            for (int j = 0; j < nodes[i].parent.childs.Count; j++)
-            {
-                if (nodes[i] == nodes[i].parent.childs[j])
-                {
-
-                    nodes[i].nodeObject.transform.LookAt(nodes[i].parent.nodeObject.transform.position);
-                }
-                
+                nodes[i].nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(entry.Key, entry.Value);
             }
         }
     }
-    
+
+
 
     void GenerateMap(Node node,Vector3 pos, Entries entrance, Color colour)
     {
@@ -128,26 +122,30 @@ public class MapGenerator : NetworkBehaviour
             if (!NodeCanSpawn(node, currentEntry.Key))
             {
                 node.entryIsOpen[currentEntry.Key] = DoorState.Stucked;
+                //node.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(currentEntry.Key,DoorState.Stucked);
                 continue;
             }
             
             node.entryIsOpen[currentEntry.Key] = DoorState.Open;
+            //node.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(currentEntry.Key,DoorState.Open);
             
             nbRoom++;
             
             //generer salle
-            GameObject newRoom=Instantiate(NodeCube, pos, Quaternion.identity);
+            GameObject newRoom=Instantiate(NodeCube.gameObject, pos, Quaternion.identity);
+            newRoom.name = "Room " + nbRoom;
             Node newChild = new Node(newRoom);
             newChild.parent = node;
             newChild.entryIsOpen[FindOppositeDoor((int)currentEntry.Key)] = DoorState.Open;
+            //newChild.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(FindOppositeDoor((int)currentEntry.Key),DoorState.Open);
             newChild.parentIsFrom = FindOppositeDoor((int)currentEntry.Key);
             node.childs.Add(newChild);
             newChild.name = "Salle" + nbRoom;
             newChild.nodePos = node.nodePos + EntriesPosValues[currentEntry.Key];
             nodes.Add(newChild);
             dunemaniereouduneautre.Add(newChild.nodePos);
-            newChild.nodeObject.transform.position+=new Vector3(newChild.nodePos.x,0,newChild.nodePos.y)*2;
-            newChild.nodeObject.GetComponent<MeshRenderer>().material.color = colour;
+            newChild.nodeObject.transform.position+=new Vector3(newChild.nodePos.x,0,newChild.nodePos.y)*NodeCube.roomSize;
+            //newChild.nodeObject.GetComponent<MeshRenderer>().material.color = colour;
             GenerateMap(newChild,pos, FindOppositeDoor(i), colour);
             
             
@@ -288,7 +286,7 @@ public class MapGenerator : NetworkBehaviour
     }
     Node NodeParkour(Node node)
     {
-        Node a = new Node(NodeCube);
+        Node a = new Node(NodeCube.gameObject);
         if (node.childs.Count > 0)
         {
             foreach (Node child in node.childs)

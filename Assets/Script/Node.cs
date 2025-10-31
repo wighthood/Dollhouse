@@ -37,6 +37,7 @@ public class Node
     public Vector2 nodePos=Vector2.zero;
     
 
+    
     public Dictionary<Entries, DoorState> entryIsOpen = new Dictionary<Entries, DoorState>();
     public Entries parentIsFrom;
     public GameObject nodeObject;
