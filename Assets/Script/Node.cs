@@ -21,9 +21,8 @@ public enum DoorState
 [Serializable]
 public class Node
 {
-    public Node(GameObject prefab)
+    public Node()
     {
-        nodeObject=prefab;
         entryIsOpen.Add(Entries.Up,DoorState.Closed);
         entryIsOpen.Add(Entries.Right,DoorState.Closed);
         entryIsOpen.Add(Entries.Down,DoorState.Closed);
@@ -37,6 +36,7 @@ public class Node
     public Vector2 nodePos=Vector2.zero;
     
 
+    
     public Dictionary<Entries, DoorState> entryIsOpen = new Dictionary<Entries, DoorState>();
     public Entries parentIsFrom;
     public GameObject nodeObject;

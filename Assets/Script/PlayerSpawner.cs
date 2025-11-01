@@ -100,11 +100,13 @@ public class StartGame : NetworkBehaviour
     
     private void SpawnPlayer()
     {
+        int i = 0;
         foreach (var player in NetworkManager.Singleton.ConnectedClientsList)
         {
-            GameObject newPlayer=Instantiate(playerPrefab, transform.position, Quaternion.identity);
+            GameObject newPlayer=Instantiate(playerPrefab, transform.GetChild(i).position, Quaternion.identity);
             newPlayer.GetComponent<NetworkObject>().SpawnWithOwnership(player.ClientId);
             newPlayer.GetComponent<Controls>().SetPlayerPrefabRPC();
+            i++;
         }
         
         LoadGame();

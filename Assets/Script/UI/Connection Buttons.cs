@@ -57,6 +57,7 @@ public class ConnectionButton : MonoBehaviour
 
         private async Task<bool> StartClientWithRelay(string joinCode, string connectionType)
         {
+            joinCode=joinCode.ToUpper();
             if (string.IsNullOrEmpty(joinCode))
             {
                 Debug.LogError("Join code is null or empty");
