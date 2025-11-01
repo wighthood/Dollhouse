@@ -11,7 +11,9 @@ public class MapGenerator : NetworkBehaviour
     
     
     public List<Node> nodes = new List<Node>();
-    int nbRoom = 0;
+    
+    // 1 to take account of the root node
+    int nbRoom = 1;
     int maxNbRoom = 60;
     List<Vector2> dunemaniereouduneautre = new List<Vector2>();
 
@@ -22,84 +24,19 @@ public class MapGenerator : NetworkBehaviour
 
 
     private Dictionary<Entries, Vector2> EntriesPosValues = new Dictionary<Entries, Vector2>();
-    private GeneratedDoorData[] roomData;
+    //private GeneratedDoorData[] roomData;
 
 
     private void Start()
     {
-        roomData=new GeneratedDoorData[maxNbRoom];
         if (IsServer)
         {
             GenerateMapServerRPC();
-            for (int i = 0; i < maxNbRoom; i++)
-            {
-                roomData[i].pos = nodes[i].nodePos;
-                for (int j = 0; j < 4; j++)
-                {
-                    if (nodes[i].entryIsOpen[(Entries)j] == DoorState.Open)
-                    {
-                        roomData[i].entriesStates[j] = false;
-                    }
-                    else
-                    {
-                        roomData[i].entriesStates[j] = true;
-                    }
-                }
-            }
-            CreateRoomsRPC(roomData);
         }
+
     }
-
-    [Rpc(SendTo.ClientsAndHost)]
-    void CreateRoomsRPC(GeneratedDoorData[] data)
-    {
-        roomData = data;
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
-            nodes[i].nodeObject=newRoom;
-            nodes[i].nodeObject.transform.position+=new Vector3(nodes[i].nodePos.x,0,nodes[i].nodePos.y);
-        }
-    }
-
-    [Rpc(SendTo.Server)]
-    void GenerateMapServerRPC()
-    {
-        EntriesPosValues.Add(Entries.Up, Vector2.up);
-        EntriesPosValues.Add(Entries.Right, Vector2.right);
-        EntriesPosValues.Add(Entries.Down, Vector2.down);
-        EntriesPosValues.Add(Entries.Left, Vector2.left);
-
-        root = new Node();
-        root.nodeObject=NodeCube.gameObject;
-        root.name = "root";
-        nodes.Add(root);
-        root.entryIsOpen[Entries.Down] = DoorState.Stucked;
-        root.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(Entries.Down, DoorState.Stucked);
-        dunemaniereouduneautre.Add(root.nodePos);
-        Color b = Color.black;
-
-
-        while (nbRoom < maxNbRoom)
-        {
-            GenerateMap(root, NodeCube.transform.position, Entries.Down, b);
-            b.r += .2f;
-
-        }
-
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            foreach (var entry in nodes[i].entryIsOpen)
-            {
-                nodes[i].nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(entry.Key, entry.Value);
-            }
-        }
-    }
-
     
-    
-
-    void GenerateMap(Node node,Vector3 pos, Entries entrance, Color colour)
+    void GenerateMap(Node node,Vector3 pos, Entries entrance)
     {
         if (nbRoom >= maxNbRoom) return;
 
@@ -129,7 +66,7 @@ public class MapGenerator : NetworkBehaviour
                 {
                     if (child.parentIsFrom==FindOppositeDoor((int)currentEntry.Key))
                     {
-                        GenerateMap(child, pos, FindOppositeDoor((int)currentEntry.Key),new Color(colour.r,0,colour.b+.2f));
+                        GenerateMap(child, pos, FindOppositeDoor((int)currentEntry.Key));
                         break;
                     }
                 }
@@ -182,143 +119,109 @@ public class MapGenerator : NetworkBehaviour
             node.childs.Add(newChild);
             newChild.name = "Salle" + nbRoom;
             newChild.nodePos = node.nodePos + EntriesPosValues[currentEntry.Key];
-            newChild.nodePos*=NodeCube.roomSize;
+            //newChild.nodePos+=NodeCube.roomSize;
             nodes.Add(newChild);
             dunemaniereouduneautre.Add(newChild.nodePos);
            
             //newChild.nodeObject.GetComponent<MeshRenderer>().material.color = colour;
-            GenerateMap(newChild,pos, FindOppositeDoor(i), colour);
+            GenerateMap(newChild,pos, FindOppositeDoor(i));
             
-            
-/*
-            Vector2 a = node.nodePos + EntriesPosValues[(Entries)i];
-            float rslt=Mathf.Atan2(a.y,a.x);
-            rslt *= Mathf.Rad2Deg;
-            Debug.Log("angle : "+rslt);
-            
-            if (Mathf.Abs(rslt - angleTarget) > maxAngle)
-            {
-                continue;
-            }
-            
-            
-            node.entryIsOpen[(Entries)i] = false;
-            
-            
-            if (nbMaxRoom <= nbRoom)
-            {
-                return;
-            }
-            
+        }
+        
+    }
+    
 
-            if (i + 2 >= 4)
-            {
-                newChild.entryIsOpen[(Entries)i-2]=false;
+    [Rpc(SendTo.Server)]
+    void GenerateMapServerRPC()
+    {
+        EntriesPosValues.Add(Entries.Up, Vector2.up);
+        EntriesPosValues.Add(Entries.Right, Vector2.right);
+        EntriesPosValues.Add(Entries.Down, Vector2.down);
+        EntriesPosValues.Add(Entries.Left, Vector2.left);
 
+        root = new Node();
+        root.nodeObject=NodeCube.gameObject;
+        root.name = "root";
+        nodes.Add(root);
+        root.entryIsOpen[Entries.Down] = DoorState.Stucked;
+        root.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(Entries.Down, DoorState.Stucked);
+        dunemaniereouduneautre.Add(root.nodePos);
+
+
+        while (nbRoom < maxNbRoom)
+        {
+            GenerateMap(root, NodeCube.transform.position, Entries.Down);
+
+
+        }
+        
+        //beginning at 1 to skip root node
+        for (int i = 1; i < nodes.Count; i++)
+        {
+            GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity,root.nodeObject.transform.parent);
+            nodes[i].nodeObject=newRoom;
+            nodes[i].nodeObject.transform.position=new Vector3(nodes[i].nodePos.x,0,nodes[i].nodePos.y);
+            nodes[i].nodeObject.transform.position *= NodeCube.roomSize;
+            nodes[i].nodeObject.name = "Room " +  i;
+        }
+        GeneratedDoorData[] data = new GeneratedDoorData[nodes.Count];
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            data[i] = new GeneratedDoorData
+            {
+                pos = nodes[i].nodeObject.transform.position
+            };
+            foreach (var entry in nodes[i].entryIsOpen)
+            {
+                nodes[i].nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(entry.Key, entry.Value);
+                
+                if (entry.Value == DoorState.Open)
+                {
+                    data[i].entriesStates[(int)entry.Key] = false;
+                }
+                else
+                {
+                    data[i].entriesStates[(int)entry.Key] = true;
+                }
+            }
+        }
+        CreateClientRoomsRPC(data);
+        
+        
+    }
+    
+    [Rpc(SendTo.ClientsAndHost)]
+    void CreateClientRoomsRPC(GeneratedDoorData[] data)
+    {
+        //roomData = data;
+        RoomDoorsRef roomInfo;
+        for (int i = 0; i < data.Length; i++)
+        {
+            //always taking account the root
+            if (i > 0)
+            {
+                GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
+                newRoom.transform.position=data[i].pos;
+                roomInfo = newRoom.GetComponent<RoomDoorsRef>();
             }
             else
             {
-                newChild.entryIsOpen[(Entries)i+2]=false;
+                roomInfo = NodeCube;
             }
-
             
-            newRoom.name = "Salle" + nbRoom;
-            Debug.Log(newChild.name);
-            Debug.Log("nbroom : " + nbRoom);
-            nodes.Add(newChild);
-         //   Debug.Log("total : " + totalDoors);
-             
-            GenerateMap(newChild,pos, nbMaxRoom);
-            if (node.parent == null)
+            
+            
+            for (int j = 0; j < 4; j++)
             {
-                angleTarget -= 90;
-                if (angleTarget < 0)
-                {
-                    angleTarget = 180;
-                }
-            }*/
-            
+                roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
+            }
         }
-        /*
-        while (node.parent == null && nbRoom < nbMaxRoom)
-        {
-            Dictionary<int,Entries> indexBuffer=new Dictionary<int,Entries>();
-            angleTarget = 90;
-
-
-            List<int> indexBuffer2=new List<int>();
-            for (int i = nodes.Count-1; i >=0 ; i--)
-            {
-                if (nodes[i].parent != null)
-                {
-                    float rslt=Mathf.Atan2(nodes[i].nodePos.y,nodes[i].nodePos.x);
-                    rslt *= Mathf.Rad2Deg;
-                    Debug.Log(rslt);
-                    if (Mathf.Abs(rslt - angleTarget) > maxAngle)
-                    {
-                        Destroy(nodes[i].nodeObject);
-                    }
-                }
-            }
-
-            for (int i = 0; i < indexBuffer2.Count; i++)
-            {
-                nodes.RemoveAt(indexBuffer2[i]);
-                nbRoom--;
-            }
-            for (int i = 0; i < nodes.Count; i++)
-            {
-
-                
-                foreach (var entry1 in nodes[i].entryIsOpen.Where(entry=>entry.Value==true))
-                {
-                    if (entry1.Value)
-                    {
-                        for (int j = i; j < nodes.Count; j++)
-                        {
-                            foreach (var entry2 in nodes[j].entryIsOpen.Where(entry=>entry.Value==true))
-                            {
-                                if (entry2.Value)
-                                {
-                                    if (nodes[i].nodePos + EntriesPosValues[entry1.Key] ==
-                                        nodes[j].nodePos + EntriesPosValues[entry2.Key] || 
-                                        nodes[i].nodePos == 
-                                        nodes[j].nodePos + EntriesPosValues[entry2.Key] || 
-                                        nodes[j].nodePos == nodes[i].nodePos + EntriesPosValues[entry2.Key])
-                                    {
-                                        if (!indexBuffer.ContainsKey(i))
-                                        {
-                                            indexBuffer.Add(i,entry1.Key);
-                                        }
-                                        if (!indexBuffer.ContainsKey(j))
-                                        {
-                                            indexBuffer.Add(j,entry2.Key);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            foreach (var index in indexBuffer)
-            {
-                nodes[index.Key].entryIsOpen[index.Value]=false;
-            }
-
-            Node nodeTocheck = node;
-            angleTarget = 0;
-
-            nodeTocheck = parkour(nodeTocheck);
-            
-            GenerateMap(nodeTocheck,Vector3.zero, nbMaxRoom);
-
-            
-        }
-        */
     }
+
+    
+    
+
+    
 
     bool NodeCanSpawn(Node node, Entries entry)
     {

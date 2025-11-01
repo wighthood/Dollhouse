@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class GeneratedDoorData : INetworkSerializable
 {
-    public Vector2 pos;
+    public Vector3 pos;
     public bool[] entriesStates=new bool[4];
+
+    public GeneratedDoorData()
+    {
+        entriesStates=new bool[4];
+    }
     
     
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter

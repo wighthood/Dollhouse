@@ -103,10 +103,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor
       objectReference: {fileID: 0}
-    - target: {fileID: 1500891957196003263, guid: b0552557226485a4fa2f32b9ff694ae1, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
     - target: {fileID: 2441770198213745158, guid: b0552557226485a4fa2f32b9ff694ae1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -168,7 +164,7 @@ PrefabInstance:
     - target: {fileID: 1507047189923819198, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 2426296653337950766, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: m_Name
       value: Door
@@ -216,11 +212,11 @@ PrefabInstance:
     - target: {fileID: 3437772312867114896, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 3952941623656693841, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -286,7 +282,7 @@ PrefabInstance:
     - target: {fileID: 3999416734995136578, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 5013115679526231931, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: m_Name
       value: WallVerticalUp
@@ -317,7 +313,7 @@ PrefabInstance:
     - target: {fileID: 1507047189923819198, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 2426296653337950766, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: m_Name
       value: Door (2)
@@ -365,11 +361,11 @@ PrefabInstance:
     - target: {fileID: 3437772312867114896, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 3952941623656693841, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -391,7 +387,7 @@ PrefabInstance:
     - target: {fileID: 1507047189923819198, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 2426296653337950766, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: m_Name
       value: Door (3)
@@ -439,11 +435,11 @@ PrefabInstance:
     - target: {fileID: 3437772312867114896, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 3952941623656693841, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -509,7 +505,7 @@ PrefabInstance:
     - target: {fileID: 3999416734995136578, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 5013115679526231931, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: m_Name
       value: WallVerticalRight
@@ -584,7 +580,7 @@ PrefabInstance:
     - target: {fileID: 3999416734995136578, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 5013115679526231931, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: m_Name
       value: WallVerticalDown
@@ -659,7 +655,7 @@ PrefabInstance:
     - target: {fileID: 3999416734995136578, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 5013115679526231931, guid: 9a93fbab5ed77544c8e2da7ed4139154, type: 3}
       propertyPath: m_Name
       value: WallVerticalLeft
@@ -690,7 +686,7 @@ PrefabInstance:
     - target: {fileID: 1507047189923819198, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 2426296653337950766, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: m_Name
       value: Door (1)
@@ -738,11 +734,11 @@ PrefabInstance:
     - target: {fileID: 3437772312867114896, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     - target: {fileID: 3952941623656693841, guid: aab4655597d46ed45ae34071f5fbad3d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1b41dd691077ddf408617946ebb06332, type: 2}
+      objectReference: {fileID: 2100000, guid: a2d20109c77a87246a7ccebd30418d0a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
