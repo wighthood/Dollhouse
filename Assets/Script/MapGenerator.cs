@@ -193,27 +193,30 @@ public class MapGenerator : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     void CreateClientRoomsRPC(GeneratedDoorData[] data)
     {
-        //roomData = data;
-        RoomDoorsRef roomInfo;
-        for (int i = 0; i < data.Length; i++)
+        if (!IsHost)
         {
-            //always taking account the root
-            if (i > 0)
+            //roomData = data;
+            RoomDoorsRef roomInfo;
+            for (int i = 0; i < data.Length; i++)
             {
-                GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
-                newRoom.transform.position=data[i].pos;
-                roomInfo = newRoom.GetComponent<RoomDoorsRef>();
-            }
-            else
-            {
-                roomInfo = NodeCube;
-            }
+                //always taking account the root
+                if (i > 0)
+                {
+                    GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
+                    newRoom.transform.position=data[i].pos;
+                    roomInfo = newRoom.GetComponent<RoomDoorsRef>();
+                }
+                else
+                {
+                    roomInfo = NodeCube;
+                }
             
             
             
-            for (int j = 0; j < 4; j++)
-            {
-                roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
+                for (int j = 0; j < 4; j++)
+                {
+                    roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
+                }
             }
         }
     }
