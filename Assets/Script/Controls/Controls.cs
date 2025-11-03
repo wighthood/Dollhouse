@@ -16,6 +16,7 @@ public class Controls : NetworkBehaviour
     [SerializeField] float rotationSpeed=1;
     [SerializeField] private GameObject audioSettings;
     Movements movements;
+    private float dt = 0;
     
     private void Awake()
     {
@@ -24,6 +25,19 @@ public class Controls : NetworkBehaviour
         movements = GetComponent<Movements>();
         movements.cam = cam;
         audioListener = cam.GetComponent<AudioListener>();
+        VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+    }
+    
+    private void Update()
+    {
+        dt += 1;
+        if (dt >= 10)
+        {
+            dt = 0;
+            VivoxService.Instance.Set3DPosition(transform.position,transform.position,transform.forward,transform.up,StaticCode.GameCode);
+            
+        }
+        
     }
     
     [Rpc(SendTo.ClientsAndHost)]
@@ -119,9 +133,9 @@ public class Controls : NetworkBehaviour
         transform.rotation = Quaternion.Euler(newRotation);
     }
 
-    public void SetTchatVolume()
-    {
-        Debug.Log(audioSettings.GetComponentInChildren<Slider>().value);
-        VivoxService.Instance.SetOutputDeviceVolume(Mathf.FloorToInt(audioSettings.GetComponentInChildren<Slider>().value));
-    }
+    // public void SetTchatVolume()
+    // {
+    //     Debug.Log(audioSettings.GetComponentInChildren<Slider>().value);
+    //     VivoxService.Instance.SetOutputDeviceVolume(Mathf.FloorToInt(audioSettings.GetComponentInChildren<Slider>().value));
+    // }
 }
