@@ -72,9 +72,8 @@ public class StartGame : NetworkBehaviour
     }
     
     [Rpc(SendTo.ClientsAndHost)]
-    private void IsReadyClientRpc(bool allReady, ulong clientId = 0,bool ready = false)
+    private void IsReadyClientRpc(bool allReady, ulong clientId,bool ready)
     {
-        Debug.Log(clientId);
         _displays[clientId].GetComponentInChildren<Image>().color = ready ? Color.green : Color.red;
         if (IsHost)
         {
@@ -90,13 +89,12 @@ public class StartGame : NetworkBehaviour
             {
                 if (!PlayersReady[i])
                 {
-                    Debug.Log(PlayersID[i+1]);
-                    IsReadyClientRpc(false,PlayersID[i+1], PlayersReady[i]);
+                    IsReadyClientRpc(false,PlayersID[i], PlayersReady[i]);
                     return;
                 }
             }
         }
-        IsReadyClientRpc(true);
+        IsReadyClientRpc(true,clientId,PlayersReady[(int)clientId-1]);
     }
     #endregion
     
