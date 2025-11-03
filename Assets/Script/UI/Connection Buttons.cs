@@ -15,7 +15,6 @@ public class ConnectionButton : MonoBehaviour
     {
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _joinButton;
-        
         [SerializeField] private TMP_InputField inputField;
         private void Start()
         {
@@ -29,10 +28,8 @@ public class ConnectionButton : MonoBehaviour
         { 
             await StartClientWithRelay(inputField.text, "udp");
             
-            StaticCode.GameCode= inputField.text;
+            StaticCode.GameCode= inputField.text.ToUpper();
             await VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.ExponentialByDistance));
-
-            
             SwitchToGameScene();
         }
 

@@ -116,6 +116,11 @@ public class StartGame : NetworkBehaviour
     
     void LoadGame()
     {
+        if (VivoxService.Instance.ActiveChannels?.Count > 0)
+        {
+            var channParts = VivoxService.Instance.ActiveChannels[StaticCode.GameCode];
+            Debug.Log(StaticCode.GameCode + " Participants COUNT: " + channParts?.Count);
+        }
         NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
     

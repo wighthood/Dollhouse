@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Services.Vivox;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class Controls : NetworkBehaviour
     [SerializeField] float rotationSpeed=1;
     [SerializeField] private GameObject Menu;
     Movements movements;
+    private float dt = 0;
 
     private void Awake()
     {
@@ -33,7 +35,10 @@ public class Controls : NetworkBehaviour
             playerInput.enabled = true;
             cam.enabled = true;
             audioListener.enabled = true;
+
             VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+
+            
         }
         
     }
@@ -71,6 +76,18 @@ public class Controls : NetworkBehaviour
         
     }
 
+    private void Update()
+    {
+        dt += 1;
+        if (dt >= 10)
+        {
+            dt = 0;
+            VivoxService.Instance.Set3DPosition(transform.position,transform.position,transform.forward,transform.up,StaticCode.GameCode);
+            
+        }
+        
+    }
+
     [Rpc(SendTo.Server)]
     void MoveToServerRPC(bool moving,Vector2 input=new Vector2())
     {
@@ -87,8 +104,6 @@ public class Controls : NetworkBehaviour
             return;
         }
         movements.enabled = false;
-        VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
-        
         
     }
 
@@ -116,7 +131,9 @@ public class Controls : NetworkBehaviour
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
         Vector3 newRotation=actualRotation+(new Vector3(-input.y,input.x,0)*rotationSpeed*Time.deltaTime);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
-        VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+        
+        
+
     }
 
 }
