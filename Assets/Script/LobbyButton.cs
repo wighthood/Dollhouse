@@ -1,8 +1,14 @@
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LobbyButton : NetworkBehaviour
 {
+    private void Start()
+    {
+        Cursor.visible = true;
+    }
+
     public void Disconnect()
     {
         if (IsHost)
