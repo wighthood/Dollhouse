@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 
 public class PeriphericalCreep : NetworkBehaviour
@@ -16,13 +14,13 @@ public class PeriphericalCreep : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        playerCams.Add(other.GetComponent<Camera>());
+        playerCams.Add(other.GetComponentInChildren<Camera>());
         SetPeriphericalDisappear(IsOnlyOnePlayerLooking(playerCams));
     }
 
     private void OnTriggerExit(Collider other)
     {
-        playerCams.Remove(other.GetComponent<Camera>());
+        playerCams.Remove(other.GetComponentInChildren<Camera>());
         SetPeriphericalDisappear(IsOnlyOnePlayerLooking(playerCams));
     }
 
@@ -32,11 +30,9 @@ public class PeriphericalCreep : NetworkBehaviour
         {
             return true;
         }
-        
         periphericalDisappear.ResetState();
         periphericalDisappear.enabled = false;
         return false;
-        
     }
     
     void SetPeriphericalDisappear(bool value)
@@ -46,6 +42,6 @@ public class PeriphericalCreep : NetworkBehaviour
         {
             periphericalDisappear.GetPlayerInfo(playerCams[0].gameObject);
         }
-        
     }
+    
 }

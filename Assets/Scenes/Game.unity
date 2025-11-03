@@ -243,6 +243,8 @@ GameObject:
   - component: {fileID: 253438631}
   - component: {fileID: 253438630}
   - component: {fileID: 253438635}
+  - component: {fileID: 253438637}
+  - component: {fileID: 253438636}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -367,6 +369,34 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &253438636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253438628}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 667484c088ac1404e8b22d7cc2f6bd96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PeriphericalDisappear
+  ShowTopMostFoldoutHeaderGroup: 1
+  PeriphAngle: 10
+  disappearTimer: 1
+--- !u!114 &253438637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253438628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb45448fbbcc3fc4ca3fac9aa70b1869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PeriphericalCreep
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &788254657
 GameObject:
   m_ObjectHideFlags: 0
