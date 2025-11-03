@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GeneratedDoorData : INetworkSerializable
 {
-    public Vector3 pos;
+    public Vector2 pos;
     public bool[] entriesStates=new bool[4];
 
     public GeneratedDoorData()
