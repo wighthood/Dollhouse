@@ -6,6 +6,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -48,10 +49,13 @@ public class ConnectionButton : MonoBehaviour
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync(); //Todo: handle sign in elsewhere && not anonymously
+                await VivoxService.Instance.InitializeAsync();
+                
             }
             var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(allocation.ToRelayServerData(connectionType));
             var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties());
             return NetworkManager.Singleton.StartHost() ? joinCode : null;
         }
 
@@ -68,6 +72,8 @@ public class ConnectionButton : MonoBehaviour
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync(); //Todo: handle sign in elsewhere && not anonymously
+                await VivoxService.Instance.InitializeAsync();
+                
             }
 
             try
@@ -80,6 +86,7 @@ public class ConnectionButton : MonoBehaviour
                 Debug.LogError($"Relay join failed: {e.Message}");
                 return false;
             }
+            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties());
             return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
         }
 

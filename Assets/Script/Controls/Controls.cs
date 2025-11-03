@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -84,6 +85,9 @@ public class Controls : NetworkBehaviour
             return;
         }
         movements.enabled = false;
+
+        VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+        
     }
 
 

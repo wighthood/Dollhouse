@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -106,6 +107,7 @@ public class StartGame : NetworkBehaviour
             GameObject newPlayer=Instantiate(playerPrefab, transform.GetChild(i).position, Quaternion.identity);
             newPlayer.GetComponent<NetworkObject>().SpawnWithOwnership(player.ClientId);
             newPlayer.GetComponent<Controls>().SetPlayerPrefabRPC();
+            VivoxService.Instance.Set3DPosition(newPlayer, StaticCode.GameCode);
             i++;
         }
         
