@@ -107,7 +107,7 @@ public class StartGame : NetworkBehaviour
             GameObject newPlayer=Instantiate(playerPrefab, transform.GetChild(i).position, Quaternion.identity);
             newPlayer.GetComponent<NetworkObject>().SpawnWithOwnership(player.ClientId);
             newPlayer.GetComponent<Controls>().SetPlayerPrefabRPC();
-            VivoxService.Instance.Set3DPosition(newPlayer, StaticCode.GameCode);
+            //VivoxService.Instance.Set3DPosition(player.PlayerObject.gameObject, StaticCode.GameCode);
             i++;
         }
         

@@ -33,7 +33,9 @@ public class Controls : NetworkBehaviour
             playerInput.enabled = true;
             cam.enabled = true;
             audioListener.enabled = true;
+            VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
         }
+        
     }
 
     public void OpenMenu(InputAction.CallbackContext context)
@@ -85,8 +87,8 @@ public class Controls : NetworkBehaviour
             return;
         }
         movements.enabled = false;
-
         VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+        
         
     }
 
@@ -114,6 +116,7 @@ public class Controls : NetworkBehaviour
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
         Vector3 newRotation=actualRotation+(new Vector3(-input.y,input.x,0)*rotationSpeed*Time.deltaTime);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
+        VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
     }
 
 }

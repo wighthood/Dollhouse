@@ -30,6 +30,8 @@ public class ConnectionButton : MonoBehaviour
             await StartClientWithRelay(inputField.text, "udp");
             
             StaticCode.GameCode= inputField.text;
+            await VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.ExponentialByDistance));
+
             
             SwitchToGameScene();
         }
@@ -40,6 +42,7 @@ public class ConnectionButton : MonoBehaviour
             inputField.gameObject.SetActive(false);
             StaticCode.GameCode = joinCode;
             Debug.Log(joinCode);
+            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.ExponentialByDistance));
             SwitchToGameScene();
         }
 
@@ -55,7 +58,6 @@ public class ConnectionButton : MonoBehaviour
             var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(allocation.ToRelayServerData(connectionType));
             var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties());
             return NetworkManager.Singleton.StartHost() ? joinCode : null;
         }
 
@@ -86,7 +88,6 @@ public class ConnectionButton : MonoBehaviour
                 Debug.LogError($"Relay join failed: {e.Message}");
                 return false;
             }
-            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties());
             return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
         }
 
