@@ -1,6 +1,9 @@
+using System;
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Controls : NetworkBehaviour
 {
@@ -11,6 +14,7 @@ public class Controls : NetworkBehaviour
     
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
+    [SerializeField] private GameObject audioSettings;
     Movements movements;
     
     private void Awake()
@@ -39,6 +43,8 @@ public class Controls : NetworkBehaviour
         if (!IsOwner) return;
         Cursor.visible = !Menu.activeSelf;
         Menu.SetActive(!Menu.activeSelf);
+        audioSettings.SetActive(!audioSettings.activeSelf);
+        
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -111,5 +117,11 @@ public class Controls : NetworkBehaviour
         actualRotation=transform.rotation.eulerAngles;
         newRotation = actualRotation+new Vector3(0,input.x,0)*rotationSpeed*Time.deltaTime;
         transform.rotation = Quaternion.Euler(newRotation);
+    }
+
+    public void SetTchatVolume()
+    {
+        Debug.Log(audioSettings.GetComponentInChildren<Slider>().value);
+        VivoxService.Instance.SetOutputDeviceVolume(Mathf.FloorToInt(audioSettings.GetComponentInChildren<Slider>().value));
     }
 }
