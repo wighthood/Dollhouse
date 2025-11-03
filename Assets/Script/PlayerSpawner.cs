@@ -54,9 +54,9 @@ public class StartGame : NetworkBehaviour
     {
         if (obj == 0) return;
         PlayersID.Remove(obj);
-        PlayersReady.RemoveAt((int)obj);
-        if (IsServer) UpdatePlayerDisplaysClientRpc();
+        PlayersReady.RemoveAt((int)obj-1);
         CheckReady(obj);
+        if (IsServer) UpdatePlayerDisplaysClientRpc();
     }
 
     #region ready
