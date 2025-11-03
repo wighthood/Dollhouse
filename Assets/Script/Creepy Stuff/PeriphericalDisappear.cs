@@ -27,21 +27,18 @@ public class PeriphericalDisappear : NetworkBehaviour
 
     void Update()
     {
-        angle = Vector3.Angle(playerCam.transform.forward,direction.normalized);
-        Debug.Log(angle); 
-        if (!IsViewObstructed() &&dt < disappearTimer)
+        if (playerCam == null) return;
+        angle = Vector3.Angle(playerCam.transform.forward,-direction.normalized);
+        if (!IsViewObstructed() &&dt < disappearTimer && angle < maxAngle && angle > minAngle)
         {
-            if (angle < maxAngle && angle > minAngle)
-            {
-                meshRenderer.enabled = true;
-            }
+            dt += Time.deltaTime; 
+            meshRenderer.enabled = true;
         }
         else
         {
             meshRenderer.enabled = false;
             dt = 0;
         }
-        dt += Time.deltaTime;
     }
 
     internal void ResetState()
@@ -55,7 +52,7 @@ public class PeriphericalDisappear : NetworkBehaviour
     internal bool IsViewObstructed()
     {
         vpPos = playerCam.WorldToViewportPoint(transform.position);
-        maxAngle = playerCam.fieldOfView/2;
+        maxAngle = playerCam.fieldOfView;
         minAngle = maxAngle - PeriphAngle;
         direction = playerCam.transform.position - transform.position;
         Physics.Raycast(transform.position + direction*GetComponent<Collider>().bounds.size.magnitude

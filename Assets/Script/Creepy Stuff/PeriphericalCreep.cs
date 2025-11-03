@@ -14,28 +14,39 @@ public class PeriphericalCreep : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        playerCams.Add(other.GetComponentInChildren<Camera>());
-        SetPeriphericalDisappear(IsOnlyOnePlayerLooking(playerCams));
+        if (other.CompareTag("Player") && IsOwner)
+        {
+            TriggerEnterServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void TriggerEnterServerRpc(ulong clientId)
+    {
+        playerCams.Add(NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponentInChildren<Camera>());
+        IsOnlyOnePlayerLooking();
     }
 
     private void OnTriggerExit(Collider other)
     {
         playerCams.Remove(other.GetComponentInChildren<Camera>());
-        SetPeriphericalDisappear(IsOnlyOnePlayerLooking(playerCams));
+        IsOnlyOnePlayerLooking();
     }
 
-    bool IsOnlyOnePlayerLooking(List<Camera> playerCam)
+    void IsOnlyOnePlayerLooking()
     {
-        if (playerCam.Count == 1)
+        if (playerCams.Count == 1)
         {
-            return true;
+            SetPeriphericalDisappearClientRpc(true);
+            return;
         }
         periphericalDisappear.ResetState();
         periphericalDisappear.enabled = false;
-        return false;
+        SetPeriphericalDisappearClientRpc(false);
     }
     
-    void SetPeriphericalDisappear(bool value)
+    [Rpc(SendTo.ClientsAndHost)]
+    void SetPeriphericalDisappearClientRpc(bool value)
     {
         periphericalDisappear.enabled = value;
         if (value)

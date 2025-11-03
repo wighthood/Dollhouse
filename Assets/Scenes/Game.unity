@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PeriphericalDisappear
   ShowTopMostFoldoutHeaderGroup: 1
-  PeriphAngle: 10
+  PeriphAngle: 5
   disappearTimer: 1
 --- !u!114 &253438637
 MonoBehaviour:
