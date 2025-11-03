@@ -32,16 +32,29 @@ public class PeriphericalDisappear : NetworkBehaviour
         if (!IsViewObstructed() &&dt < disappearTimer && angle < maxAngle && angle > minAngle)
         {
             dt += Time.deltaTime; 
-            meshRenderer.enabled = true;
+            CornerViewServerRpc(true);
         }
         else
         {
-            meshRenderer.enabled = false;
+            CornerViewServerRpc(false);
             dt = 0;
         }
     }
 
-    internal void ResetState()
+    [Rpc(SendTo.Server)]
+    private void CornerViewServerRpc(bool value)
+    {
+        CornerViewClientRpc(value);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void CornerViewClientRpc(bool value)
+    {
+        meshRenderer.enabled = value;
+    }
+    
+    [Rpc(SendTo.ClientsAndHost)]
+    internal void ResetStateClientRpc()
     {
         dt = 0;
         meshRenderer.enabled = false;

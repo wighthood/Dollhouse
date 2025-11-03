@@ -338,7 +338,7 @@ Transform:
   m_GameObject: {fileID: 253438628}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.61, y: 2.15, z: 3.89}
+  m_LocalPosition: {x: -8.22, y: 2.15, z: 3.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -397,6 +397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PeriphericalCreep
   ShowTopMostFoldoutHeaderGroup: 1
+  periphericalDisappear: {fileID: 253438636}
 --- !u!1 &788254657
 GameObject:
   m_ObjectHideFlags: 0
