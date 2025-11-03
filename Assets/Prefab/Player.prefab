@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6418688491636559099}
   - component: {fileID: 893740817131684314}
   - component: {fileID: 8154750746119745811}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5294902918212774653}
   - component: {fileID: 2443941065921473574}
   - component: {fileID: 9035379402601957218}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 7364221096337544625}
   - component: {fileID: 4606483716793117082}
   - component: {fileID: 3607580775342941943}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 8089224948849558759}
   - component: {fileID: 4928056914896767241}
   - component: {fileID: 1962375323466079861}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 902656564
+  GlobalObjectIdHash: 175261903
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -812,7 +812,7 @@ GameObject:
   - component: {fileID: 3640069879818805574}
   - component: {fileID: 3061337593879410559}
   - component: {fileID: 1615003962688883369}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}

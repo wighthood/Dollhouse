@@ -144,7 +144,7 @@ public class MapGenerator : NetworkBehaviour
         root.name = "root";
         nodes.Add(root);
         root.entryIsOpen[Entries.Down] = DoorState.Stucked;
-        root.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(Entries.Down, DoorState.Stucked);
+        //root.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(Entries.Down, DoorState.Stucked);
         dunemaniereouduneautre.Add(root.nodePos);
 
 
@@ -155,25 +155,16 @@ public class MapGenerator : NetworkBehaviour
 
         }
         
-        //beginning at 1 to skip root node
-        for (int i = 1; i < nodes.Count; i++)
-        {
-            GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity,root.nodeObject.transform.parent);
-            nodes[i].nodeObject=newRoom;
-            nodes[i].nodeObject.transform.position=new Vector3(nodes[i].nodePos.x,0,nodes[i].nodePos.y);
-            nodes[i].nodeObject.transform.position *= NodeCube.roomSize;
-            nodes[i].nodeObject.name = "Room " +  i;
-        }
         GeneratedDoorData[] data = new GeneratedDoorData[nodes.Count];
         for (int i = 0; i < nodes.Count; i++)
         {
             data[i] = new GeneratedDoorData
             {
-                pos = nodes[i].nodeObject.transform.position
+                pos = nodes[i].nodePos
             };
             foreach (var entry in nodes[i].entryIsOpen)
             {
-                nodes[i].nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(entry.Key, entry.Value);
+                //nodes[i].nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(entry.Key, entry.Value);
                 
                 if (entry.Value == DoorState.Open)
                 {
@@ -193,29 +184,30 @@ public class MapGenerator : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     void CreateClientRoomsRPC(GeneratedDoorData[] data)
     {
-        //roomData = data;
-        RoomDoorsRef roomInfo;
-        for (int i = 0; i < data.Length; i++)
-        {
-            //always taking account the root
-            if (i > 0)
+            //roomData = data;
+            RoomDoorsRef roomInfo;
+            for (int i = 0; i < data.Length; i++)
             {
-                GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
-                newRoom.transform.position=data[i].pos;
-                roomInfo = newRoom.GetComponent<RoomDoorsRef>();
-            }
-            else
-            {
-                roomInfo = NodeCube;
-            }
+                //always taking account the root
+                if (i > 0)
+                {
+                    GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
+                    roomInfo = newRoom.GetComponent<RoomDoorsRef>();
+                    newRoom.transform.position=new Vector3(data[i].pos.x*roomInfo.roomSize,0,data[i].pos.y*roomInfo.roomSize);
+                    newRoom.name = "Room " +  i;
+                }
+                else
+                {
+                    roomInfo = NodeCube;
+                }
             
             
             
-            for (int j = 0; j < 4; j++)
-            {
-                roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
+                for (int j = 0; j < 4; j++)
+                {
+                    roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
+                }
             }
-        }
     }
 
     
