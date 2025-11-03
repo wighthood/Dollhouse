@@ -29,7 +29,7 @@ public class ConnectionButton : MonoBehaviour
             await StartClientWithRelay(inputField.text, "udp");
             
             StaticCode.GameCode= inputField.text.ToUpper();
-            await VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.ExponentialByDistance));
+            await VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.InverseByDistance));
             SwitchToGameScene();
         }
 
@@ -39,7 +39,7 @@ public class ConnectionButton : MonoBehaviour
             inputField.gameObject.SetActive(false);
             StaticCode.GameCode = joinCode;
             Debug.Log(joinCode);
-            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.ExponentialByDistance));
+            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties(32,1,1.0f,AudioFadeModel.InverseByDistance));
             SwitchToGameScene();
         }
 
