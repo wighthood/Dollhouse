@@ -119,7 +119,6 @@ public class Polaroid : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)] 
     private void ShowPhotoClientRPC(byte[] PNG)
     {
-        if (!IsOwner)return;
         Texture2D tex = new Texture2D(2, 2);
         tex.LoadImage(PNG);
         PhotoShower.SetActive(true);
