@@ -46,6 +46,7 @@ public class Controls : NetworkBehaviour
     public void OpenMenu(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
+        Cursor.visible = !Menu.activeSelf;
         Menu.SetActive(!Menu.activeSelf);
     }
 
