@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -93,7 +92,7 @@ public class Polaroid : NetworkBehaviour
         return result;
     }
     
-    IEnumerator Screenshot(int width, int height)
+    IEnumerator Screenshot()
     {
         yield return new WaitForEndOfFrame();
         Texture2D tex = new Texture2D(1, 1, TextureFormat.RGB24, false);
@@ -146,7 +145,7 @@ public class Polaroid : NetworkBehaviour
     {
         if(IsOwner && !Menu.activeSelf && context.started && photos.Count < maxPhotos)
         {
-            StartCoroutine(Screenshot(Screen.width, Screen.height));
+            StartCoroutine(Screenshot());
         }
     }
 }
