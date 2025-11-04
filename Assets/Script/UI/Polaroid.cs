@@ -64,7 +64,7 @@ public class Polaroid : NetworkBehaviour
         }
         if (context.started)
         {
-            ShowPhotoServerRPC(photos[currentPhoto].EncodeToJPG());
+            ShowPhotoServerRPC(photos[currentPhoto].EncodeToJPG(50));
         }
 
         if (context.canceled)
