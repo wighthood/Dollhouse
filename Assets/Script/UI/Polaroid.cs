@@ -77,16 +77,13 @@ public class Polaroid : NetworkBehaviour
     IEnumerator Screenshot(int width, int height)
     {
         yield return new WaitForEndOfFrame();
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        Texture2D tex = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-        tex.Apply();
-        tex.Reinitialize(1920, 1080);
         tex.Apply();
         photos.Add(tex);
         photoInstances.Add(Instantiate(photoPrefab, PhotoHolder.transform));
         photoInstances[^1].GetComponent<Image>().sprite =
-            Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        byte[] bytes = tex.EncodeToJPG();
+            Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
         LayoutRebuilder.ForceRebuildLayoutImmediate(PhotoHolder.GetComponent<RectTransform>());
         SetSelectorPosition(currentPhoto);
     }
@@ -122,7 +119,7 @@ public class Polaroid : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)] 
     private void ShowPhotoClientRPC(byte[] PNG)
     {
-        Texture2D tex = new Texture2D(2, 2);
+        Texture2D tex = new Texture2D(1, 1);
         tex.LoadImage(PNG);
         PhotoShower.SetActive(true);
         PhotoShower.GetComponent<MeshRenderer>().material.mainTexture = tex;
