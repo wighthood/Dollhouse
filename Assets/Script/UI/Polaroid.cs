@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -124,6 +125,7 @@ public class Polaroid : NetworkBehaviour
         tex.LoadImage(PNG);
         PhotoShower.SetActive(true);
         PhotoShower.GetComponent<MeshRenderer>().material.mainTexture = tex;
+        PhotoShower.GetComponent<MeshRenderer>().material.mainTextureScale = tex.Size();
     }
     
     public void TakeScreenshot(InputAction.CallbackContext context)
