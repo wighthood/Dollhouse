@@ -12,8 +12,8 @@ public class Movements : NetworkBehaviour
     {
         Vector3 horizontalForward=new Vector3(cam.transform.forward.x,0,cam.transform.forward.z);
         Vector3 horizontalRight=new Vector3(cam.transform.right.x,0,cam.transform.right.z);
-        transform.position+=horizontalForward*movement.z;
-        transform.position+=horizontalRight*movement.x;
-        
+        transform.position+=horizontalForward*(movement.z * Time.deltaTime);
+        transform.position+=horizontalRight*(movement.x * Time.deltaTime);
+
     }
 }
