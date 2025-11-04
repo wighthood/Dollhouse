@@ -78,8 +78,8 @@ public class Polaroid : NetworkBehaviour
     {
         yield return new WaitForEndOfFrame();
         Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-        tex.Reinitialize(1920, 1080);
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        tex.Reinitialize(1920, 1080);
         tex.Apply();
         photos.Add(tex);
         photoInstances.Add(Instantiate(photoPrefab, PhotoHolder.transform));
@@ -125,7 +125,6 @@ public class Polaroid : NetworkBehaviour
         tex.LoadImage(PNG);
         PhotoShower.SetActive(true);
         PhotoShower.GetComponent<MeshRenderer>().material.mainTexture = tex;
-        PhotoShower.GetComponent<MeshRenderer>().material.mainTextureScale = tex.Size();
     }
     
     public void TakeScreenshot(InputAction.CallbackContext context)
