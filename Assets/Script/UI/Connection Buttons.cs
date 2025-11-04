@@ -6,6 +6,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,7 +15,6 @@ public class ConnectionButton : MonoBehaviour
     {
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _joinButton;
-        
         [SerializeField] private TMP_InputField inputField;
         private void Start()
         {
@@ -28,8 +28,8 @@ public class ConnectionButton : MonoBehaviour
         { 
             await StartClientWithRelay(inputField.text, "udp");
             
-            StaticCode.GameCode= inputField.text;
-            
+            StaticCode.GameCode= inputField.text.ToUpper();
+            await VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
             SwitchToGameScene();
         }
 
@@ -39,6 +39,7 @@ public class ConnectionButton : MonoBehaviour
             inputField.gameObject.SetActive(false);
             StaticCode.GameCode = joinCode;
             Debug.Log(joinCode);
+            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
             SwitchToGameScene();
         }
 
@@ -48,6 +49,8 @@ public class ConnectionButton : MonoBehaviour
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync(); //Todo: handle sign in elsewhere && not anonymously
+                await VivoxService.Instance.InitializeAsync();
+                
             }
             var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(allocation.ToRelayServerData(connectionType));
@@ -68,6 +71,8 @@ public class ConnectionButton : MonoBehaviour
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync(); //Todo: handle sign in elsewhere && not anonymously
+                await VivoxService.Instance.InitializeAsync();
+                
             }
 
             try

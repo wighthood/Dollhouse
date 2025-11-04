@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine;
 
 public class Movements : NetworkBehaviour
@@ -13,5 +14,6 @@ public class Movements : NetworkBehaviour
         Vector3 horizontalRight=new Vector3(cam.transform.right.x,0,cam.transform.right.z);
         transform.position+=horizontalForward*(movement.z * Time.deltaTime);
         transform.position+=horizontalRight*(movement.x * Time.deltaTime);
+
     }
 }
