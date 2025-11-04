@@ -64,7 +64,7 @@ public class Polaroid : NetworkBehaviour
         }
         if (context.started)
         {
-            ShowPhotoServerRPC(photos[currentPhoto].EncodeToJPG(25));
+            ShowPhotoServerRPC(photos[currentPhoto].EncodeToJPG());
         }
 
         if (context.canceled)
@@ -77,6 +77,7 @@ public class Polaroid : NetworkBehaviour
     {
         yield return new WaitForEndOfFrame();
         Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        tex.Reinitialize(1920, 1080);
         tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
         tex.Apply();
         photos.Add(tex);
