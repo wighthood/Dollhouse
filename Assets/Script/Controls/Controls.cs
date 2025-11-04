@@ -124,18 +124,12 @@ public class Controls : NetworkBehaviour
     void RotateToClientRPC(Vector2 input)
     {
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
-        Vector3 newRotation=actualRotation+new Vector3(-input.y,0,0)*rotationSpeed*Time.deltaTime;
+        Vector3 newRotation=actualRotation+new Vector3(-input.y,0,0)*rotationSpeed;
         if (newRotation.x>180f) newRotation.x-=360f;
         newRotation.x=Mathf.Clamp(newRotation.x,-90f,90f);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
         actualRotation=transform.rotation.eulerAngles;
-        newRotation = actualRotation+new Vector3(0,input.x,0)*rotationSpeed*Time.deltaTime;
+        newRotation = actualRotation+new Vector3(0,input.x,0)*rotationSpeed;
         transform.rotation = Quaternion.Euler(newRotation);
     }
-
-    // public void SetTchatVolume()
-    // {
-    //     Debug.Log(audioSettings.GetComponentInChildren<Slider>().value);
-    //     VivoxService.Instance.SetOutputDeviceVolume(Mathf.FloorToInt(audioSettings.GetComponentInChildren<Slider>().value));
-    // }
 }

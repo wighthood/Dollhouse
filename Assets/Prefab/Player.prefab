@@ -1189,7 +1189,7 @@ MonoBehaviour:
   Menu: {fileID: 4124502141486467025}
   movementSpeed: 5
   rotationSpeed: 5
-  audioSettings: {fileID: 3590566726070671687}
+  audioSettings: {fileID: 0}
 --- !u!114 &4928056914896767241
 MonoBehaviour:
   m_ObjectHideFlags: 0
