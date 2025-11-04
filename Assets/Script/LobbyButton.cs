@@ -23,8 +23,8 @@ public class LobbyButton : NetworkBehaviour
 
     private void TrueDisconnect()
     {
-        SceneManager.LoadScene("MainMenu");
         NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
     
     [Rpc(SendTo.Server)]

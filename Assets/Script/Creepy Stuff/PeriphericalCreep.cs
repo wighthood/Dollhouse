@@ -1,51 +1,57 @@
-using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 
 public class PeriphericalCreep : NetworkBehaviour
 {
+    [SerializeField] PeriphericalDisappear periphericalDisappear;
     List<Camera> playerCams = new List<Camera>();
-    PeriphericalDisappear periphericalDisappear;
-
-    private void Start()
-    {
-        periphericalDisappear = GetComponent<PeriphericalDisappear>();
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
-        playerCams.Add(other.GetComponent<Camera>());
-        SetPeriphericalDisappear(IsOnlyOnePlayerLooking(playerCams));
+        if (other.CompareTag("Player"))
+        {
+            playerCams.Add(other.GetComponentInChildren<Camera>(true));
+            TriggerEnterServerRpc();
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void TriggerEnterServerRpc()
+    {
+        IsOnlyOnePlayerLooking();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        playerCams.Remove(other.GetComponent<Camera>());
-        SetPeriphericalDisappear(IsOnlyOnePlayerLooking(playerCams));
+        if (other.CompareTag("Player"))
+        {
+            playerCams.Remove(other.GetComponentInChildren<Camera>(true));
+            TriggerExitServerRpc();
+        }
     }
 
-    bool IsOnlyOnePlayerLooking(List<Camera> playerCam)
+    [Rpc(SendTo.Server)]
+    private void TriggerExitServerRpc()
     {
-        if (playerCam.Count == 1)
+        IsOnlyOnePlayerLooking();
+    }
+
+    void IsOnlyOnePlayerLooking()
+    {
+        if (playerCams.Count == 1)
         {
-            return true;
+            SetPeriphericalDisappearClientRpc();
+            return;
         }
-        
-        periphericalDisappear.ResetState();
+        periphericalDisappear.ResetStateClientRpc();
         periphericalDisappear.enabled = false;
-        return false;
-        
     }
     
-    void SetPeriphericalDisappear(bool value)
+    [Rpc(SendTo.ClientsAndHost)]
+    void SetPeriphericalDisappearClientRpc()
     {
-        periphericalDisappear.enabled = value;
-        if (value)
-        {
-            periphericalDisappear.GetPlayerInfo(playerCams[0].gameObject);
-        }
-        
+        periphericalDisappear.enabled = true;
+        periphericalDisappear.GetPlayerInfo(playerCams[0].gameObject);
     }
 }

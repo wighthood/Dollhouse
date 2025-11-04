@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class MapGenerator : NetworkBehaviour
@@ -15,25 +16,26 @@ public class MapGenerator : NetworkBehaviour
     // 1 to take account of the root node
     int nbRoom = 1;
     int maxNbRoom = 60;
-    List<Vector2> dunemaniereouduneautre = new List<Vector2>();
+    List<Vector2> AllNodesPos = new List<Vector2>();
 
     [SerializeField]
     RoomDoorsRef NodeCube;
+
+
+    [Header("SPOOKY STUFF")]
+    [SerializeField] private GameObject creeper;
+    [SerializeField] private float creeperChance;
     
     private Node root;
-
-
+    
     private Dictionary<Entries, Vector2> EntriesPosValues = new Dictionary<Entries, Vector2>();
-    //private GeneratedDoorData[] roomData;
-
-
+    
     private void Start()
     {
         if (IsServer)
         {
             GenerateMapServerRPC();
         }
-
     }
     
     void GenerateMap(Node node,Vector3 pos, Entries entrance)
@@ -89,41 +91,28 @@ public class MapGenerator : NetworkBehaviour
             {
                 continue;
             }
-            
             int r = Random.Range(0, 2);
-
             if (r == 0)
             {
                 continue;
             }
-
             if (!NodeCanSpawn(node, currentEntry.Key))
             {
                 node.entryIsOpen[currentEntry.Key] = DoorState.Stucked;
-                //node.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(currentEntry.Key,DoorState.Stucked);
                 continue;
             }
-            
             node.entryIsOpen[currentEntry.Key] = DoorState.Open;
-            //node.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(currentEntry.Key,DoorState.Open);
-            
             nbRoom++;
-            
-            //generer salle
-            
+            //generate room
             Node newChild = new Node();
             newChild.parent = node;
             newChild.entryIsOpen[FindOppositeDoor((int)currentEntry.Key)] = DoorState.Open;
-            //newChild.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(FindOppositeDoor((int)currentEntry.Key),DoorState.Open);
             newChild.parentIsFrom = FindOppositeDoor((int)currentEntry.Key);
             node.childs.Add(newChild);
             newChild.name = "Salle" + nbRoom;
             newChild.nodePos = node.nodePos + EntriesPosValues[currentEntry.Key];
-            //newChild.nodePos+=NodeCube.roomSize;
             nodes.Add(newChild);
-            dunemaniereouduneautre.Add(newChild.nodePos);
-           
-            //newChild.nodeObject.GetComponent<MeshRenderer>().material.color = colour;
+            AllNodesPos.Add(newChild.nodePos);
             GenerateMap(newChild,pos, FindOppositeDoor(i));
             
         }
@@ -144,17 +133,12 @@ public class MapGenerator : NetworkBehaviour
         root.name = "root";
         nodes.Add(root);
         root.entryIsOpen[Entries.Down] = DoorState.Stucked;
-        //root.nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(Entries.Down, DoorState.Stucked);
-        dunemaniereouduneautre.Add(root.nodePos);
-
-
+        AllNodesPos.Add(root.nodePos);
+        
         while (nbRoom < maxNbRoom)
         {
             GenerateMap(root, NodeCube.transform.position, Entries.Down);
-
-
         }
-        
         GeneratedDoorData[] data = new GeneratedDoorData[nodes.Count];
         for (int i = 0; i < nodes.Count; i++)
         {
@@ -164,8 +148,6 @@ public class MapGenerator : NetworkBehaviour
             };
             foreach (var entry in nodes[i].entryIsOpen)
             {
-                //nodes[i].nodeObject.GetComponent<RoomDoorsRef>().OpenCloseEntry(entry.Key, entry.Value);
-                
                 if (entry.Value == DoorState.Open)
                 {
                     data[i].entriesStates[(int)entry.Key] = false;
@@ -177,18 +159,15 @@ public class MapGenerator : NetworkBehaviour
             }
         }
         CreateClientRoomsRPC(data);
-        
-        
     }
     
     [Rpc(SendTo.ClientsAndHost)]
     void CreateClientRoomsRPC(GeneratedDoorData[] data)
     {
-            //roomData = data;
             RoomDoorsRef roomInfo;
             for (int i = 0; i < data.Length; i++)
             {
-                //always taking account the root
+                //always taking into account the root
                 if (i > 0)
                 {
                     GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
@@ -209,15 +188,10 @@ public class MapGenerator : NetworkBehaviour
                 }
             }
     }
-
     
-    
-
-    
-
     bool NodeCanSpawn(Node node, Entries entry)
     {
-        return !dunemaniereouduneautre.Contains(node.nodePos + EntriesPosValues[entry]);
+        return !AllNodesPos.Contains(node.nodePos + EntriesPosValues[entry]);
 
     }
     Node NodeParkour(Node node)

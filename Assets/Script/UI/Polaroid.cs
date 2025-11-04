@@ -48,7 +48,7 @@ public class Polaroid : NetworkBehaviour
         if (context.started)
         {
             PhotoZoom.SetActive(true);
-            PhotoZoom.GetComponent<Image>().sprite = photoInstances[currentPhoto].GetComponent<Image>().sprite;
+            PhotoZoom.GetComponent<RawImage>().texture = photos[currentPhoto];
         }
         if (context.canceled)
         {
@@ -64,7 +64,8 @@ public class Polaroid : NetworkBehaviour
         }
         if (context.started)
         {
-            ShowPhotoServerRPC(photos[currentPhoto].EncodeToJPG());
+            
+            ShowPhotoServerRPC(ResizeTexture(photos[currentPhoto],512,288).EncodeToJPG());
         }
 
         if (context.canceled)
@@ -72,18 +73,33 @@ public class Polaroid : NetworkBehaviour
             HidePhotoServerRPC();
         }
     }
+
+    private Texture2D ResizeTexture(Texture2D source, int width, int height)
+    {
+        RenderTexture RT = RenderTexture.GetTemporary(width, height);
+        Graphics.Blit(source, RT);
+
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = RT;
+        
+        Texture2D result = new Texture2D(width, height);
+        result.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(RT);
+        
+        return result;
+    }
     
-    IEnumerator Screenshot(int width, int height)
+    IEnumerator Screenshot()
     {
         yield return new WaitForEndOfFrame();
-        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-        tex.Apply();
+        Texture2D tex = new Texture2D(1, 1, TextureFormat.RGB24, false);
+        tex = ScreenCapture.CaptureScreenshotAsTexture();
         photos.Add(tex);
         photoInstances.Add(Instantiate(photoPrefab, PhotoHolder.transform));
-        photoInstances[^1].GetComponent<Image>().sprite =
-            Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        byte[] bytes = tex.EncodeToJPG();
+        photoInstances[^1].GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         LayoutRebuilder.ForceRebuildLayoutImmediate(PhotoHolder.GetComponent<RectTransform>());
         SetSelectorPosition(currentPhoto);
     }
@@ -119,8 +135,7 @@ public class Polaroid : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)] 
     private void ShowPhotoClientRPC(byte[] PNG)
     {
-        if (!IsOwner)return;
-        Texture2D tex = new Texture2D(2, 2);
+        Texture2D tex = new Texture2D(1920, 1080);
         tex.LoadImage(PNG);
         PhotoShower.SetActive(true);
         PhotoShower.GetComponent<MeshRenderer>().material.mainTexture = tex;
@@ -130,7 +145,7 @@ public class Polaroid : NetworkBehaviour
     {
         if(IsOwner && !Menu.activeSelf && context.started && photos.Count < maxPhotos)
         {
-            StartCoroutine(Screenshot(Screen.width, Screen.height));
+            StartCoroutine(Screenshot());
         }
     }
 }

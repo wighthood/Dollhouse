@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6902862992120935101}
   - component: {fileID: 3171895001535811805}
-  - component: {fileID: 197544678999185857}
+  - component: {fileID: 8472814500187017557}
   m_Layer: 5
   m_Name: PhotoPrefab
   m_TagString: Untagged
@@ -45,7 +45,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8067482157689317407}
   m_CullTransparentMesh: 1
---- !u!114 &197544678999185857
+--- !u!114 &8472814500187017557
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
