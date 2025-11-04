@@ -49,7 +49,7 @@ public class Polaroid : NetworkBehaviour
         if (context.started)
         {
             PhotoZoom.SetActive(true);
-            PhotoZoom.GetComponent<Image>().sprite = photoInstances[currentPhoto].GetComponent<Image>().sprite;
+            PhotoZoom.GetComponent<RawImage>().texture = photos[currentPhoto];
         }
         if (context.canceled)
         {
@@ -82,8 +82,7 @@ public class Polaroid : NetworkBehaviour
         tex.Apply();
         photos.Add(tex);
         photoInstances.Add(Instantiate(photoPrefab, PhotoHolder.transform));
-        photoInstances[^1].GetComponent<Image>().sprite =
-            Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
+        photoInstances[^1].GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         LayoutRebuilder.ForceRebuildLayoutImmediate(PhotoHolder.GetComponent<RectTransform>());
         SetSelectorPosition(currentPhoto);
     }
@@ -119,7 +118,7 @@ public class Polaroid : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)] 
     private void ShowPhotoClientRPC(byte[] PNG)
     {
-        Texture2D tex = new Texture2D(1, 1);
+        Texture2D tex = new Texture2D(1920, 1080);
         tex.LoadImage(PNG);
         PhotoShower.SetActive(true);
         PhotoShower.GetComponent<MeshRenderer>().material.mainTexture = tex;
