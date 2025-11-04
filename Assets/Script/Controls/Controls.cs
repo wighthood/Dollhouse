@@ -78,7 +78,7 @@ public class Controls : NetworkBehaviour
         if (moving)
         {
             movements.enabled = true;
-            movements.movement = new Vector3(input.x, 0, input.y) * movementSpeed * Time.deltaTime;
+            movements.movement = new Vector3(input.x, 0, input.y) * movementSpeed;
             return;
         }
         movements.enabled = false;
