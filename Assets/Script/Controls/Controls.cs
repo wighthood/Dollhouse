@@ -124,12 +124,12 @@ public class Controls : NetworkBehaviour
     void RotateToClientRPC(Vector2 input)
     {
         Vector3 actualRotation=cam.transform.localRotation.eulerAngles;
-        Vector3 newRotation=actualRotation+new Vector3(-input.y,0,0)*rotationSpeed;
+        Vector3 newRotation=actualRotation+new Vector3(-input.y,0,0)*(rotationSpeed * NetworkManager.ServerTime.FixedDeltaTime);
         if (newRotation.x>180f) newRotation.x-=360f;
         newRotation.x=Mathf.Clamp(newRotation.x,-90f,90f);
         cam.transform.localRotation=Quaternion.Euler(newRotation);
         actualRotation=transform.rotation.eulerAngles;
-        newRotation = actualRotation+new Vector3(0,input.x,0)*rotationSpeed;
+        newRotation = actualRotation + new Vector3(0, input.x, 0) *(rotationSpeed *NetworkManager.ServerTime.FixedDeltaTime);
         transform.rotation = Quaternion.Euler(newRotation);
     }
 }
