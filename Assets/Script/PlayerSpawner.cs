@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Vivox;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -39,6 +40,12 @@ public class StartGame : NetworkBehaviour
             button.onClick.AddListener(IsReady);
             button.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
         }
+
+        for (int i = 0; i < PlayersReady.Count; i++)
+        {
+            PlayersReady[i] = false;
+            if (IsHost) IsReadyClientRpc(false,PlayersID[i+1],PlayersReady[i]);
+        }
     }
 
     private void OnClientConnected(ulong obj)
@@ -47,15 +54,15 @@ public class StartGame : NetworkBehaviour
         PlayersID.Add(obj);
         PlayersReady.Add(false);
         if (IsServer) UpdatePlayerDisplaysClientRpc();
-        CheckReady(obj);
+        SetReady(obj);
     }
     
     private void OnClientDisconnected(ulong obj)
     {
-        if (obj == 0) return;
+        if (obj == 0 || SceneManager.GetActiveScene().name != "Lobby") return;
         PlayersID.Remove(obj);
         PlayersReady.RemoveAt((int)obj-1);
-        CheckReady(obj);
+        SetReady(obj);
         if (IsServer) UpdatePlayerDisplaysClientRpc();
     }
 
@@ -68,8 +75,9 @@ public class StartGame : NetworkBehaviour
     [Rpc(SendTo.Server)]
     private void IsReadyServerRpc(ulong clientId)
     {
+        if (clientId == 0) return;
         PlayersReady[(int)clientId-1] = !PlayersReady[(int)clientId-1];
-        CheckReady(clientId);    
+        SetReady(clientId);    
     }
     
     [Rpc(SendTo.ClientsAndHost)]
@@ -82,7 +90,7 @@ public class StartGame : NetworkBehaviour
         }
     }
     
-    private void CheckReady(ulong clientId = 0)
+    private void SetReady(ulong clientId)
     {
         if (PlayersReady.Count > 0)
         {
