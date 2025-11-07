@@ -1188,7 +1188,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   Menu: {fileID: 4124502141486467025}
   movementSpeed: 5
-  rotationSpeed: 5
+  rotationSpeed: 1
   audioSettings: {fileID: 3590566726070671687}
 --- !u!114 &4928056914896767241
 MonoBehaviour:
