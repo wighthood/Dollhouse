@@ -28,6 +28,7 @@ public class Controls : NetworkBehaviour
         movements.cam = cam;
         audioListener = cam.GetComponent<AudioListener>();
         VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+        movements.animator=animator;
     }
     
     private void Update()
@@ -102,7 +103,7 @@ public class Controls : NetworkBehaviour
         {
             movements.enabled = true;
             movements.movement = new Vector3(input.x, 0, input.y) * movementSpeed;
-            animator.SetFloat("Speed", movements.movement.magnitude);
+            
             return;
         }
         movements.enabled = false;
@@ -135,5 +136,11 @@ public class Controls : NetworkBehaviour
         actualRotation=transform.rotation.eulerAngles;
         newRotation = actualRotation + new Vector3(0, input.x, 0) *(rotationSpeed *NetworkManager.ServerTime.FixedDeltaTime);
         transform.rotation = Quaternion.Euler(newRotation);
+    }
+    
+    public void SetTchatVolume()
+    {
+        //Debug.Log(audioSettings.GetComponentInChildren<Slider>().value);
+        VivoxService.Instance.SetOutputDeviceVolume(Mathf.FloorToInt(audioSettings.GetComponentInChildren<Slider>().value));
     }
 }
