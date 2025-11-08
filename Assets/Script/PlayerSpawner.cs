@@ -115,7 +115,7 @@ public class StartGame : NetworkBehaviour
             GameObject newPlayer=Instantiate(playerPrefab, transform.GetChild(i).position, Quaternion.identity);
             newPlayer.GetComponent<NetworkObject>().SpawnWithOwnership(player.ClientId);
             newPlayer.GetComponent<Controls>().SetPlayerPrefabRPC();
-            //VivoxService.Instance.Set3DPosition(player.PlayerObject.gameObject, StaticCode.GameCode);
+            
             i++;
         }
         
@@ -124,11 +124,7 @@ public class StartGame : NetworkBehaviour
     
     void LoadGame()
     {
-        if (VivoxService.Instance.ActiveChannels?.Count > 0)
-        {
-            var channParts = VivoxService.Instance.ActiveChannels[StaticCode.GameCode];
-            Debug.Log(StaticCode.GameCode + " Participants COUNT: " + channParts?.Count);
-        }
+
         NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
     
