@@ -1190,6 +1190,7 @@ MonoBehaviour:
   movementSpeed: 5
   rotationSpeed: 1
   audioSettings: {fileID: 3590566726070671687}
+  Inventory: {fileID: 8232298171258466356}
 --- !u!114 &4928056914896767241
 MonoBehaviour:
   m_ObjectHideFlags: 0
