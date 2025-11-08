@@ -665,6 +665,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   nodes: []
   NodeCube: {fileID: 2034145037}
+  creeper: {fileID: 0}
+  creeperChance: 0
   references:
     version: 2
     RefIds: []
@@ -692,6 +694,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1965517336}
     m_Modifications:
+    - target: {fileID: 3940606511495532257, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -913,6 +919,4 @@ SceneRoots:
   - {fileID: 875614119}
   - {fileID: 1965517336}
   - {fileID: 2117513275}
-  - {fileID: 253438633}
-  - {fileID: 1374733605}
   - {fileID: 2066368439}
