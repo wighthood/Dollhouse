@@ -36,7 +36,6 @@ public class ConnectionButton : MonoBehaviour
         public async void OnHostButtonClicked()
         {
             string joinCode = await StartHostWithRelay(15, "udp");
-            inputField.gameObject.SetActive(false);
             StaticCode.GameCode = joinCode;
             Debug.Log(joinCode);
             await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
