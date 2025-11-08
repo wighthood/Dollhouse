@@ -21,6 +21,6 @@ public class Movements : NetworkBehaviour
 
     private void OnDisable()
     {
-        animator.SetFloat("Speed", movement.magnitude);
+        animator.SetFloat("Speed", 0);
     }
 }

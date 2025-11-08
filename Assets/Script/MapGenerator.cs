@@ -15,7 +15,7 @@ public class MapGenerator : NetworkBehaviour
     
     // 1 to take account of the root node
     int nbRoom = 1;
-    int maxNbRoom = 60;
+    [SerializeField] int maxNbRoom = 60;
     List<Vector2> AllNodesPos = new List<Vector2>();
 
     [SerializeField]
