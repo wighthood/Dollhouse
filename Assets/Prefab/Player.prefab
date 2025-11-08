@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 8089224948849558759}
   - component: {fileID: 4928056914896767241}
   - component: {fileID: 1962375323466079861}
+  - component: {fileID: 5994575390063625554}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -1138,6 +1139,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InGameMenu
   ShowTopMostFoldoutHeaderGroup: 1
   button: {fileID: 9035379402601957218}
+--- !u!114 &5994575390063625554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3717553578398603447}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9231878a41aeb1409b14eae219ec37f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChatAudioUpdate
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &3833133838094228487
 GameObject:
   m_ObjectHideFlags: 0

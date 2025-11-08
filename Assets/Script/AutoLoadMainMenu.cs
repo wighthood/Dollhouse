@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine.SceneManagement;
 
 public class AutoLoadMainMenu : NetworkBehaviour

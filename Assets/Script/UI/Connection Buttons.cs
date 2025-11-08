@@ -29,7 +29,6 @@ public class ConnectionButton : MonoBehaviour
             await StartClientWithRelay(inputField.text, "udp");
             
             StaticCode.GameCode= inputField.text.ToUpper();
-            await VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
             SwitchToGameScene();
         }
 
@@ -38,7 +37,6 @@ public class ConnectionButton : MonoBehaviour
             string joinCode = await StartHostWithRelay(15, "udp");
             StaticCode.GameCode = joinCode;
             Debug.Log(joinCode);
-            await VivoxService.Instance.JoinPositionalChannelAsync(joinCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
             SwitchToGameScene();
         }
 
