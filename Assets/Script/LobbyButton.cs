@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

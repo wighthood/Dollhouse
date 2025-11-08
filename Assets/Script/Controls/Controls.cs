@@ -15,10 +15,11 @@ public class Controls : NetworkBehaviour
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     [SerializeField] private GameObject audioSettings;
+    private ChatAudioUpdate playerChat;
     [SerializeField] private GameObject Inventory;
     [SerializeField] private Animator animator;
     Movements movements;
-    private float dt = 0;
+
     
     private void Awake()
     {
@@ -27,21 +28,39 @@ public class Controls : NetworkBehaviour
         movements = GetComponent<Movements>();
         movements.cam = cam;
         audioListener = cam.GetComponent<AudioListener>();
-        VivoxService.Instance.Set3DPosition(gameObject, StaticCode.GameCode);
+        VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
+        
+        playerChat = GetComponent<ChatAudioUpdate>();
+        VivoxService.Instance.ChannelJoined += ActivateAudioUpdate;
+        VivoxService.Instance.ChannelLeft += DeactivateAudioUpdate;
         movements.animator=animator;
+        
     }
-    
-    private void Update()
+
+    void ActivateAudioUpdate(string channel)
     {
-        dt += 1;
-        if (dt >= 10)
+        if (IsOwner)
         {
-            dt = 0;
-            VivoxService.Instance.Set3DPosition(transform.position,transform.position,transform.forward,transform.up,StaticCode.GameCode);
-            
+            if (playerChat != null)
+            {
+                playerChat.enabled = false;
+            }
         }
         
     }
+
+    void DeactivateAudioUpdate(string channel)
+    {
+        if (IsOwner)
+        {
+            if (playerChat != null)
+            {
+                playerChat.enabled = false;
+            }
+            
+        }
+    }
+    
     
     [Rpc(SendTo.ClientsAndHost)]
     public void SetPlayerPrefabRPC()
@@ -140,7 +159,6 @@ public class Controls : NetworkBehaviour
     
     public void SetTchatVolume()
     {
-        //Debug.Log(audioSettings.GetComponentInChildren<Slider>().value);
         VivoxService.Instance.SetOutputDeviceVolume(Mathf.FloorToInt(audioSettings.GetComponentInChildren<Slider>().value));
     }
 }

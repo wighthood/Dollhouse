@@ -1,4 +1,6 @@
 using Unity.Netcode;
+using Unity.Services.Vivox;
+using Unity.Services.Vivox.AudioTaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
