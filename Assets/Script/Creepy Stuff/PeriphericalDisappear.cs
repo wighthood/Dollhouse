@@ -14,7 +14,7 @@ public class PeriphericalDisappear : NetworkBehaviour
     private CapsuleCollider playerCollider;
     private RaycastHit hit;
     private Vector3 direction;
-    private MeshRenderer meshRenderer;
+    private SpriteRenderer spriteRenderer;
     private bool wasSeen = false;
     private float angle = 180;
     private float maxAngle=60;
@@ -23,7 +23,7 @@ public class PeriphericalDisappear : NetworkBehaviour
     // Update is called once per frame
     private void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -40,6 +40,11 @@ public class PeriphericalDisappear : NetworkBehaviour
             CornerViewServerRpc(false);
             dt = 0;
         }
+
+        if (spriteRenderer.enabled)
+        {
+            transform.LookAt(hit.point);
+        }
     }
 
     [Rpc(SendTo.Server)]
@@ -51,14 +56,15 @@ public class PeriphericalDisappear : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     private void CornerViewClientRpc(bool value)
     {
-        meshRenderer.enabled = value;
+        Debug.Log(value);
+        spriteRenderer.enabled = value;
     }
     
     [Rpc(SendTo.ClientsAndHost)]
     internal void ResetStateClientRpc()
     {
         dt = 0;
-        meshRenderer.enabled = false;
+        spriteRenderer.enabled = false;
         wasSeen = false;
         vpPos = Vector3.zero;
     }

@@ -11,7 +11,7 @@ public class PeriphericalCreep : NetworkBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerCams.Add(other.GetComponentInChildren<Camera>(true));
+            playerCams.Add(other.transform.parent.GetComponentInChildren<Camera>(true));
             TriggerEnterServerRpc();
         }
     }
@@ -26,7 +26,7 @@ public class PeriphericalCreep : NetworkBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerCams.Remove(other.GetComponentInChildren<Camera>(true));
+            playerCams.Remove(other.transform.parent.GetComponentInChildren<Camera>(true));
             TriggerExitServerRpc();
         }
     }
