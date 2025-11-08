@@ -15,6 +15,7 @@ public class Controls : NetworkBehaviour
     [SerializeField] float movementSpeed=1;
     [SerializeField] float rotationSpeed=1;
     [SerializeField] private GameObject audioSettings;
+    [SerializeField] private GameObject Inventory;
     Movements movements;
     private float dt = 0;
     
@@ -49,6 +50,7 @@ public class Controls : NetworkBehaviour
             playerInput.enabled = true;
             cam.enabled = true;
             audioListener.enabled = true;
+            Inventory.SetActive(true);
         }
     }
 
