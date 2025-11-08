@@ -16,6 +16,7 @@ public class Controls : NetworkBehaviour
     [SerializeField] float rotationSpeed=1;
     [SerializeField] private GameObject audioSettings;
     [SerializeField] private GameObject Inventory;
+    [SerializeField] private Animator animator;
     Movements movements;
     private float dt = 0;
     
@@ -101,6 +102,7 @@ public class Controls : NetworkBehaviour
         {
             movements.enabled = true;
             movements.movement = new Vector3(input.x, 0, input.y) * movementSpeed;
+            animator.SetFloat("Speed", movements.movement.magnitude);
             return;
         }
         movements.enabled = false;
