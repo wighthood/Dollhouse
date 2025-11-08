@@ -116,6 +116,7 @@ public class StartGame : NetworkBehaviour
             newPlayer.GetComponent<NetworkObject>().SpawnWithOwnership(player.ClientId);
             newPlayer.GetComponent<Controls>().SetPlayerPrefabRPC();
             
+            
             i++;
         }
         

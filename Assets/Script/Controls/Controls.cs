@@ -28,11 +28,8 @@ public class Controls : NetworkBehaviour
         movements = GetComponent<Movements>();
         movements.cam = cam;
         audioListener = cam.GetComponent<AudioListener>();
-        VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
-        
         playerChat = GetComponent<ChatAudioUpdate>();
-        VivoxService.Instance.ChannelJoined += ActivateAudioUpdate;
-        VivoxService.Instance.ChannelLeft += DeactivateAudioUpdate;
+        playerChat.cam = cam;
         movements.animator=animator;
         
     }
@@ -43,7 +40,7 @@ public class Controls : NetworkBehaviour
         {
             if (playerChat != null)
             {
-                playerChat.enabled = false;
+                playerChat.enabled = true;
             }
         }
         
@@ -72,6 +69,10 @@ public class Controls : NetworkBehaviour
             cam.enabled = true;
             audioListener.enabled = true;
             Inventory.SetActive(true);
+            VivoxService.Instance.ChannelJoined += ActivateAudioUpdate;
+            VivoxService.Instance.ChannelLeft += DeactivateAudioUpdate;
+            VivoxService.Instance.JoinPositionalChannelAsync(StaticCode.GameCode, ChatCapability.AudioOnly,new Channel3DProperties(16,1,1.0f,AudioFadeModel.InverseByDistance));
+            
         }
     }
 

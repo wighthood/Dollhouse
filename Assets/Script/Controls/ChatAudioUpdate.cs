@@ -6,6 +6,7 @@ using UnityEngine;
 public class ChatAudioUpdate : NetworkBehaviour
 {
     private float dt = 0;
+    internal Camera cam;
     void Update()
     {
         if (IsOwner)
@@ -15,8 +16,8 @@ public class ChatAudioUpdate : NetworkBehaviour
             {
 
                 dt = 0;
-                VivoxService.Instance.Set3DPosition(transform.position, transform.position, transform.forward,
-                    transform.up, StaticCode.GameCode);
+                VivoxService.Instance.Set3DPosition(cam.transform.position, cam.transform.position, cam.transform.forward,
+                    cam.transform.up, StaticCode.GameCode);
 
             }
         }

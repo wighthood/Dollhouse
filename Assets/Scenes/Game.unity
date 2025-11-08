@@ -679,6 +679,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1965517336}
     m_Modifications:
+    - target: {fileID: 673349629452626326, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3047462140130900053, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+      propertyPath: m_Range
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3047462140130900053, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+      propertyPath: m_Intensity
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3047462140130900053, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+      propertyPath: m_SpotAngle
+      value: 179
+      objectReference: {fileID: 0}
+    - target: {fileID: 3047462140130900053, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 160
+      objectReference: {fileID: 0}
     - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
