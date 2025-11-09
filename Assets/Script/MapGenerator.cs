@@ -111,6 +111,7 @@ public class MapGenerator : NetworkBehaviour
             node.childs.Add(newChild);
             newChild.name = "Salle" + nbRoom;
             newChild.nodePos = node.nodePos + EntriesPosValues[currentEntry.Key];
+            newChild.lustreBehaviour = (LustreBehaviour)Random.Range(0, 4);
             nodes.Add(newChild);
             AllNodesPos.Add(newChild.nodePos);
             GenerateMap(newChild,pos, FindOppositeDoor(i));
@@ -144,7 +145,8 @@ public class MapGenerator : NetworkBehaviour
         {
             data[i] = new GeneratedDoorData
             {
-                pos = nodes[i].nodePos
+                pos = nodes[i].nodePos,
+                lustreBehaviour = nodes[i].lustreBehaviour,
             };
             foreach (var entry in nodes[i].entryIsOpen)
             {
@@ -179,12 +181,35 @@ public class MapGenerator : NetworkBehaviour
                 {
                     roomInfo = NodeCube;
                 }
-            
-            
+
+                switch (data[i].lustreBehaviour)
+                {
+                    case LustreBehaviour.Moving :
+                        continue;
+                    break;
+                    case LustreBehaviour.None :
+                        roomInfo.lightScript.DeactivateAnim(); 
+                        break;
+                    case LustreBehaviour.Off:
+                        roomInfo.lightScript.SetLight(0);
+                        break;
+                    case LustreBehaviour.OffNotMoving:
+                        roomInfo.lightScript.DeactivateAnim();
+                        roomInfo.lightScript.SetLight(0);
+                        break;
+                    default:
+                        break;
+                    
+                }
             
                 for (int j = 0; j < 4; j++)
                 {
                     roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
+                    if (data[i].lustreBehaviour == LustreBehaviour.Off ||
+                        data[i].lustreBehaviour == LustreBehaviour.OffNotMoving)
+                    {
+                        roomInfo.lightScript.SetDoorsLight(j,!data[i].entriesStates[j]);
+                    }
                 }
             }
     }

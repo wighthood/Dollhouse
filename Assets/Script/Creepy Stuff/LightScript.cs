@@ -1,28 +1,38 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LightScript : MonoBehaviour
 {
 
-    private Light _light;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        _light = GetComponent<Light>();
-    }
+    [SerializeField] Light light;
+    [SerializeField] Animator lustreAnim;
+    [SerializeField] List<Light> doorsLight;
     
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+
+    public void DeactivateAnim()
+    {
+        lustreAnim.enabled = false;
+    }
     public void SetLight(float intensity, Color color)
     {
-        _light.intensity = intensity;
-        _light.color = color;
+        light.intensity = intensity;
+        light.color = color;
     }
     
     public void SetLight(float intensity)
     {
-        _light.intensity = intensity;
+        light.intensity = intensity;
     }
     
     public void SetLight(Color color)
     {
-        _light.color = color;
+        light.color = color;
+    }
+
+    public void SetDoorsLight(int side,bool value)
+    {
+        doorsLight[side].gameObject.SetActive(value);
     }
 }

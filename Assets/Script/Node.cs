@@ -27,6 +27,7 @@ public class Node
         entryIsOpen.Add(Entries.Right,DoorState.Closed);
         entryIsOpen.Add(Entries.Down,DoorState.Closed);
         entryIsOpen.Add(Entries.Left,DoorState.Closed);
+        lustreBehaviour = LustreBehaviour.Moving;
         colour=Color.black;
     }
     public Node parent;
@@ -42,4 +43,5 @@ public class Node
     public GameObject nodeObject;
     public string name;
     public Color colour;
+    public LustreBehaviour lustreBehaviour;
 }

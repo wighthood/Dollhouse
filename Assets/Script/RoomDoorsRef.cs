@@ -9,6 +9,7 @@ public class RoomDoorsRef : MonoBehaviour
     
     public List<GameObject> entryGOs;
     public float roomSize;
+    public LightScript lightScript;
     
     
     public void OpenCloseEntry(Entries entry, DoorState doorState)

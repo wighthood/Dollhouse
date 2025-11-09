@@ -2,10 +2,19 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
+public enum LustreBehaviour
+{
+    None,
+    Moving,
+    Off,
+    OffNotMoving
+}
+
 public class GeneratedDoorData : INetworkSerializable
 {
     public Vector2 pos;
     public bool[] entriesStates=new bool[4];
+    public LustreBehaviour lustreBehaviour=LustreBehaviour.Moving;
 
     public GeneratedDoorData()
     {
@@ -17,5 +26,6 @@ public class GeneratedDoorData : INetworkSerializable
     {
         serializer.SerializeValue(ref pos);
         serializer.SerializeValue(ref entriesStates);
+        serializer.SerializeValue(ref lustreBehaviour);
     }
 }
