@@ -720,7 +720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6810470772423035682, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_Name
-      value: Room4DoorClosed
+      value: Root
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
