@@ -51,6 +51,10 @@ public class PeriphericalCreep : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     void SetPeriphericalDisappearClientRpc()
     {
+        if (periphericalDisappear.players.Contains(playerCams[0].gameObject))
+        {
+            return;
+        }
         periphericalDisappear.enabled = true;
         periphericalDisappear.GetPlayerInfo(playerCams[0].gameObject);
     }

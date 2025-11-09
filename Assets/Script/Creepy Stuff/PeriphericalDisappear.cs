@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public class PeriphericalDisappear : NetworkBehaviour
     private float angle = 180;
     private float maxAngle=60;
     private float minAngle=30;
+    internal List<GameObject> players=new List<GameObject>();
 
     // Update is called once per frame
     private void Start()
@@ -37,6 +39,7 @@ public class PeriphericalDisappear : NetworkBehaviour
         }
         else
         {
+            players.Add(playerCam.gameObject);
             CornerViewServerRpc(false);
             dt = 0;
         }
