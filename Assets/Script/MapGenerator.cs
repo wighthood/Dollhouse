@@ -186,7 +186,6 @@ public class MapGenerator : NetworkBehaviour
                 switch (data[i].lustreBehaviour)
                 {
                     case LustreBehaviour.Moving :
-                        continue;
                     break;
                     case LustreBehaviour.None :
                         roomInfo.lightScript.DeactivateAnim(); 

@@ -678,58 +678,58 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1965517336}
     m_Modifications:
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6810470772423035682, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+    - target: {fileID: 6810470772423035682, guid: aee1be1406150c44ab5c3af242159050, type: 3}
       propertyPath: m_Name
-      value: Root
+      value: Room4DoorClosed
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: aee1be1406150c44ab5c3af242159050, type: 3}
 --- !u!114 &2034145037 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4354295660450145594, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4354295660450145594, guid: aee1be1406150c44ab5c3af242159050, type: 3}
   m_PrefabInstance: {fileID: 2034145035}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomDoorsRef
 --- !u!4 &2034145038 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4415378122696327002, guid: 086e4ff747796c847bab51e7efba5d08, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4415378122696327002, guid: aee1be1406150c44ab5c3af242159050, type: 3}
   m_PrefabInstance: {fileID: 2034145035}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
