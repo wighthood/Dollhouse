@@ -15,7 +15,7 @@ public class MapGenerator : NetworkBehaviour
     
     // 1 to take account of the root node
     int nbRoom = 1;
-    [SerializeField] int maxNbRoom = 60;
+    int maxNbRoom = 60;
     List<Vector2> AllNodesPos = new List<Vector2>();
 
     [SerializeField]
@@ -111,7 +111,7 @@ public class MapGenerator : NetworkBehaviour
             node.childs.Add(newChild);
             newChild.name = "Salle" + nbRoom;
             newChild.nodePos = node.nodePos + EntriesPosValues[currentEntry.Key];
-            newChild.lustreBehaviour = (LustreBehaviour)Random.Range(0, 4);
+            newChild.lustreBehaviour = (LustreBehaviour)Random.Range(0, 3);
             nodes.Add(newChild);
             AllNodesPos.Add(newChild.nodePos);
             GenerateMap(newChild,pos, FindOppositeDoor(i));
@@ -132,8 +132,8 @@ public class MapGenerator : NetworkBehaviour
         root = new Node();
         root.nodeObject=NodeCube.gameObject;
         root.name = "root";
-        nodes.Add(root);
         root.entryIsOpen[Entries.Down] = DoorState.Stucked;
+        nodes.Add(root);
         AllNodesPos.Add(root.nodePos);
         
         while (nbRoom < maxNbRoom)
@@ -145,8 +145,7 @@ public class MapGenerator : NetworkBehaviour
         {
             data[i] = new GeneratedDoorData
             {
-                pos = nodes[i].nodePos,
-                lustreBehaviour = nodes[i].lustreBehaviour,
+                pos = nodes[i].nodePos
             };
             foreach (var entry in nodes[i].entryIsOpen)
             {
@@ -159,6 +158,8 @@ public class MapGenerator : NetworkBehaviour
                     data[i].entriesStates[(int)entry.Key] = true;
                 }
             }
+
+            data[i].lustreBehaviour = nodes[i].lustreBehaviour;
         }
         CreateClientRoomsRPC(data);
     }
@@ -193,10 +194,7 @@ public class MapGenerator : NetworkBehaviour
                     case LustreBehaviour.Off:
                         roomInfo.lightScript.SetLight(0);
                         break;
-                    case LustreBehaviour.OffNotMoving:
-                        roomInfo.lightScript.DeactivateAnim();
-                        roomInfo.lightScript.SetLight(0);
-                        break;
+
                     default:
                         break;
                     
@@ -205,8 +203,7 @@ public class MapGenerator : NetworkBehaviour
                 for (int j = 0; j < 4; j++)
                 {
                     roomInfo.entryGOs[j].SetActive(data[i].entriesStates[j]);
-                    if (data[i].lustreBehaviour == LustreBehaviour.Off ||
-                        data[i].lustreBehaviour == LustreBehaviour.OffNotMoving)
+                    if (data[i].lustreBehaviour == LustreBehaviour.Off )
                     {
                         roomInfo.lightScript.SetDoorsLight(j,!data[i].entriesStates[j]);
                     }

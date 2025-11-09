@@ -648,7 +648,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   ShowTopMostFoldoutHeaderGroup: 1
   nodes: []
-  maxNbRoom: 60
   NodeCube: {fileID: 2034145037}
   creeper: {fileID: 0}
   creeperChance: 0

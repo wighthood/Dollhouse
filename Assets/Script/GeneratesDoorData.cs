@@ -7,14 +7,13 @@ public enum LustreBehaviour
     None,
     Moving,
     Off,
-    OffNotMoving
 }
 
 public class GeneratedDoorData : INetworkSerializable
 {
     public Vector2 pos;
     public bool[] entriesStates=new bool[4];
-    public LustreBehaviour lustreBehaviour=LustreBehaviour.Moving;
+    public LustreBehaviour lustreBehaviour;
 
     public GeneratedDoorData()
     {
