@@ -27,11 +27,13 @@ public class MapGenerator : NetworkBehaviour
     [SerializeField] private float creeperChance;
     
     private Node root;
+    public static List<GameObject> roomList = new List<GameObject>();
     
     private Dictionary<Entries, Vector2> EntriesPosValues = new Dictionary<Entries, Vector2>();
     
     private void Start()
     {
+        roomList.Clear();
         if (IsServer)
         {
             GenerateMapServerRPC();
@@ -173,10 +175,11 @@ public class MapGenerator : NetworkBehaviour
                 //always taking into account the root
                 if (i > 0)
                 {
-                    GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity);
+                    GameObject newRoom=Instantiate(NodeCube.gameObject, Vector3.zero, Quaternion.identity,transform);
                     roomInfo = newRoom.GetComponent<RoomDoorsRef>();
                     newRoom.transform.position=new Vector3(data[i].pos.x*roomInfo.roomSize,0,data[i].pos.y*roomInfo.roomSize);
                     newRoom.name = "Room " +  i;
+                    roomList.Add(newRoom);
                 }
                 else
                 {
@@ -208,6 +211,7 @@ public class MapGenerator : NetworkBehaviour
                     }
                 }
             }
+            
     }
     
     bool NodeCanSpawn(Node node, Entries entry)
