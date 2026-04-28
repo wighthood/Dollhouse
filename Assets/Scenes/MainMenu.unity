@@ -129,6 +129,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3102757202798519842, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
   m_PrefabInstance: {fileID: 8189905317345184875}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &66179579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2351074868116597970, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+  m_PrefabInstance: {fileID: 8189905317345184875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66179577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71b286409aad3b47844a6bd777364a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Connection
 --- !u!1 &105117929
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,7 +814,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 66179577}
+      - m_Target: {fileID: 813895774}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -2680,6 +2691,38 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 66179579}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Connect
+      objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Connection, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 968939796386407907, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1663483392992089840, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
       propertyPath: m_Name
       value: Account Creation/connection
@@ -2752,6 +2795,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -50
       objectReference: {fileID: 0}
+    - target: {fileID: 2351074868116597970, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: SessionData
+      value: 
+      objectReference: {fileID: 11400000, guid: e1457d9491b84f642b9a9e5b3e017c08, type: 2}
+    - target: {fileID: 2351074868116597970, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
+      propertyPath: friendsList
+      value: 
+      objectReference: {fileID: 662984675}
     - target: {fileID: 3102757202798519842, guid: 2017003cca6b7fa4886b2ec8a2dd1c4a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

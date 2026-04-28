@@ -4,7 +4,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 [Serializable]
 public class user
@@ -42,6 +42,8 @@ public class Connection : MonoBehaviour
     [SerializeField] private GameObject answerPanel;
     [SerializeField] private TMP_Text textReturn;
     
+    [Header("token")]
+    [SerializeField] private SessionData SessionData;
 
     public void CreateAccount()
     {
@@ -75,9 +77,8 @@ public class Connection : MonoBehaviour
         answerPanel.SetActive(true);
         if (result != "User created")
         {
-            
             Debug.Log(result);
-            if (result == "{\"error\":\"ERROR: duplicate key value violates unique constraint \"users_username_key\"\n  Detail: Key (username)=(Wighthood) already exists.\"}")
+            if (result == "{\"error\":\"ERROR: duplicate key value violates unique constraint \"users_username_key\"\n  Detail: Key (username)=("+ username.text +") already exists.\"}")
                 result = "username is taken";
             textReturn.text = result;
             return;
@@ -124,16 +125,29 @@ public class Connection : MonoBehaviour
         yield return request.SendWebRequest();
         ConnectionResult(request.downloadHandler.text);
     }
+
+    [Header("FriendUI")] [SerializeField] private Button friendsList;
     
     private void ConnectionResult(string result)
     {
-        if (result != "success")
+        if (result == "invalid credentials")
         {
             answerPanel.SetActive(true);
             textReturn.text = "invalid username or password";
             cleartext();
-            return;
         }
-        Debug.Log(result);
+        else
+        { 
+            friendsList.interactable = true;
+            cleartext();
+            SessionData.token = result;
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void Disconnect()
+    {
+        //add more data/functionalities that need to be deleted/removed here
+        friendsList.interactable = false;
     }
 }
