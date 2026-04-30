@@ -7,12 +7,12 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [Serializable]
-public class user
+public class User
 {
     public string username;
     public string password;
 
-    public user(string username, string password)
+    public User(string username, string password)
     {
         this.username = username;
         this.password = password;
@@ -21,9 +21,6 @@ public class user
 
 public class Connection : MonoBehaviour
 {
-    
-    [SerializeField]
-    private string URL = "http://192.168.2.33:4242";
     [Header("account info")]
     [SerializeField]
     private TMP_InputField username;
@@ -33,6 +30,7 @@ public class Connection : MonoBehaviour
     private TMP_InputField passwordVerif;
 
     [Header("display")] 
+    [SerializeField] private GameObject ConnectionPanel;
     [SerializeField] private GameObject buttonConfirm;
     [SerializeField] private GameObject buttonConnect;
     [SerializeField] private GameObject buttoncreate;
@@ -41,6 +39,9 @@ public class Connection : MonoBehaviour
     [Header("return message")]
     [SerializeField] private GameObject answerPanel;
     [SerializeField] private TMP_Text textReturn;
+
+    [Header("Login")]
+    [SerializeField] private Button loginButton;
     
     [Header("token")]
     [SerializeField] private SessionData SessionData;
@@ -64,7 +65,7 @@ public class Connection : MonoBehaviour
         StartCoroutine(CreateAccountCoroutine());
     }
 
-    public void cleartext()
+    private void cleartext()
     {
         username.text = "";
         password.text = "";
@@ -75,12 +76,9 @@ public class Connection : MonoBehaviour
     {
         cleartext();
         answerPanel.SetActive(true);
-        if (result != "User created")
+        if (result == "false")
         {
-            Debug.Log(result);
-            if (result == "{\"error\":\"ERROR: duplicate key value violates unique constraint \"users_username_key\"\n  Detail: Key (username)=("+ username.text +") already exists.\"}")
-                result = "username is taken";
-            textReturn.text = result;
+            textReturn.text = "Account already exists";
             return;
         }
         textReturn.text = "Account created";
@@ -93,10 +91,10 @@ public class Connection : MonoBehaviour
     
     IEnumerator CreateAccountCoroutine()
     {
-        user newUser = new user(username.text, password.text);
+        User newUser = new User(username.text, password.text);
         string json = JsonUtility.ToJson(newUser);
         byte [] data = Encoding.UTF8.GetBytes(json);
-        UnityWebRequest request = new UnityWebRequest(URL + "/set/users","POST");
+        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion/createAccount","POST");
         request.uploadHandler = new UploadHandlerRaw(data);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
@@ -119,8 +117,13 @@ public class Connection : MonoBehaviour
 
     IEnumerator ConnectCoroutine()
     {
-        UnityWebRequest request = UnityWebRequest.Get(URL + "/get/users/" + username.text);
-        
+        User connectingUser = new User(username.text, password.text);
+        string json = JsonUtility.ToJson(connectingUser);
+        byte [] data = Encoding.UTF8.GetBytes(json);
+        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion","POST");
+        request.uploadHandler = new UploadHandlerRaw(data);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
         
         yield return request.SendWebRequest();
         ConnectionResult(request.downloadHandler.text);
@@ -130,7 +133,7 @@ public class Connection : MonoBehaviour
     
     private void ConnectionResult(string result)
     {
-        if (result == "invalid credentials")
+        if (result == "")
         {
             answerPanel.SetActive(true);
             textReturn.text = "invalid username or password";
@@ -139,15 +142,17 @@ public class Connection : MonoBehaviour
         else
         { 
             friendsList.interactable = true;
+            loginButton.gameObject.GetComponentInChildren<TMP_Text>().text = username.text;
             cleartext();
             SessionData.token = result;
-            gameObject.SetActive(false);
+            ConnectionPanel.SetActive(false);
         }
     }
-
+    
     public void Disconnect()
     {
         //add more data/functionalities that need to be deleted/removed here
+        loginButton.gameObject.GetComponent<TMP_Text>().text = "login";
         friendsList.interactable = false;
     }
 }
