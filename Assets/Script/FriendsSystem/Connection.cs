@@ -4,6 +4,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [Serializable]
@@ -28,20 +29,29 @@ public class Connection : MonoBehaviour
     private TMP_InputField password;
     [SerializeField]
     private TMP_InputField passwordVerif;
-
+    
+    [Header("account deletion")]
+    [SerializeField] TMP_InputField usernameDelete;
+    [SerializeField] TMP_InputField passwordDelete;
+    
+    
     [Header("display")] 
-    [SerializeField] private GameObject ConnectionPanel;
+    [SerializeField] private GameObject connectionPanel;
+    [SerializeField] private GameObject accountPanel;
     [SerializeField] private GameObject buttonConfirm;
     [SerializeField] private GameObject buttonConnect;
     [SerializeField] private GameObject buttoncreate;
     [SerializeField] private GameObject textPasswordVerif;
     
+    [Header("FriendUI")] [SerializeField] private Button friendsList;
+    
     [Header("return message")]
     [SerializeField] private GameObject answerPanel;
     [SerializeField] private TMP_Text textReturn;
 
-    [Header("Login")]
-    [SerializeField] private Button loginButton;
+    [Header("buttons")]
+    [SerializeField] private GameObject loginButton;
+    [SerializeField] private GameObject accountOption;
     
     [Header("token")]
     [SerializeField] private SessionData SessionData;
@@ -70,6 +80,8 @@ public class Connection : MonoBehaviour
         username.text = "";
         password.text = "";
         passwordVerif.text = "";
+        usernameDelete.text = "";
+        passwordDelete.text = "";
     }
 
     private void AccountCreationResult(string result)
@@ -129,7 +141,7 @@ public class Connection : MonoBehaviour
         ConnectionResult(request.downloadHandler.text);
     }
 
-    [Header("FriendUI")] [SerializeField] private Button friendsList;
+    
     
     private void ConnectionResult(string result)
     {
@@ -142,17 +154,62 @@ public class Connection : MonoBehaviour
         else
         { 
             friendsList.interactable = true;
-            loginButton.gameObject.GetComponentInChildren<TMP_Text>().text = username.text;
+            accountOption.GetComponentInChildren<TMP_Text>().text = username.text;
             cleartext();
             SessionData.token = result;
-            ConnectionPanel.SetActive(false);
+            loginButton.SetActive(false);
+            accountOption.gameObject.SetActive(true);
+            connectionPanel.SetActive(false);
+        }
+    }
+
+    public void DeleteAccount()
+    {
+        if (usernameDelete.text == "" || passwordDelete.text == "")
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "please fill all the fields";
+            cleartext();
+            return;
+        }
+        StartCoroutine(DeleteAccountCoroutine());
+    }
+
+    IEnumerator DeleteAccountCoroutine()
+    {
+        User deletingUser = new User(username.text, password.text);
+        string json = JsonUtility.ToJson(deletingUser);
+        byte [] data = Encoding.UTF8.GetBytes(json);
+        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/user/delete","POST");
+        request.uploadHandler = new UploadHandlerRaw(data);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        
+        yield return request.SendWebRequest();
+        DeleteAccountResult(request.downloadHandler.text);
+    }
+
+    private void DeleteAccountResult(string result)
+    {
+        if (result == "")
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "invalid username or password";
+            cleartext();
+        }
+        else
+        {
+            Disconnect();
         }
     }
     
+    
     public void Disconnect()
     {
-        //add more data/functionalities that need to be deleted/removed here
-        loginButton.gameObject.GetComponent<TMP_Text>().text = "login";
+        accountOption.gameObject.SetActive(false);
+        loginButton.SetActive(true);
+        accountPanel.SetActive(false);
+        SessionData.token = "";
         friendsList.interactable = false;
     }
 }
