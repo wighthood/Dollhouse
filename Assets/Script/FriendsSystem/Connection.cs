@@ -4,7 +4,6 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [Serializable]
@@ -140,8 +139,6 @@ public class Connection : MonoBehaviour
         yield return request.SendWebRequest();
         ConnectionResult(request.downloadHandler.text);
     }
-
-    
     
     private void ConnectionResult(string result)
     {
