@@ -3,6 +3,7 @@ using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -29,9 +30,17 @@ public class Connection : MonoBehaviour
     [SerializeField]
     private TMP_InputField passwordVerif;
     
-    [Header("account deletion")]
-    [SerializeField] TMP_InputField usernameDelete;
-    [SerializeField] TMP_InputField passwordDelete;
+    
+    [Header("account gestion fields")]
+    [SerializeField] GameObject gestionPanel;
+    [SerializeField] TMP_InputField usernameGestion;
+    [SerializeField] TMP_InputField passwordGestion;
+    
+    [Header("account update username")]
+    [SerializeField] TMP_InputField usernameUpdate;
+    [SerializeField] private GameObject textNewUsername;
+
+
     
     
     [Header("display")] 
@@ -79,8 +88,9 @@ public class Connection : MonoBehaviour
         username.text = "";
         password.text = "";
         passwordVerif.text = "";
-        usernameDelete.text = "";
-        passwordDelete.text = "";
+        usernameGestion.text = "";
+        passwordGestion.text = "";
+        usernameUpdate.text = "";
     }
 
     private void AccountCreationResult(string result)
@@ -160,9 +170,86 @@ public class Connection : MonoBehaviour
         }
     }
 
+    public void ConfirmFunction()
+    {
+        if (usernameUpdate.IsActive())
+        {
+            UpdateUsername();
+            return;
+        }
+        DeleteAccount();
+    }
+    public void UpdateUsername()
+    {
+        if (usernameGestion.text == "" || passwordGestion.text == "" || usernameUpdate.text == "")
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "please fill all the fields";
+            cleartext();
+            return;
+        }
+        StartCoroutine(UpdateUsernameCoroutine());
+
+    }
+    [Serializable]
+    class UpdatingUser
+    {
+        public string username;
+        public string password;
+        public string newUsername;
+
+        public UpdatingUser(string username, string password, string newUsername)
+        {
+            this.username = username;
+            this.password = password;
+            this.newUsername = newUsername;
+        }
+    }
+    IEnumerator UpdateUsernameCoroutine()
+    {
+        UpdatingUser updatingUser = new UpdatingUser(usernameGestion.text, passwordGestion.text, usernameUpdate.text);
+        
+        string json = JsonUtility.ToJson(updatingUser);
+        
+        byte [] data = Encoding.UTF8.GetBytes(json);
+        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion/updateUsername","PUT");
+        request.uploadHandler = new UploadHandlerRaw(data);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        
+        yield return request.SendWebRequest();
+        UpdateUsernameResult(request.downloadHandler.text);
+    }
+
+    private void UpdateUsernameResult(string result)
+    {
+        if (result == "")
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "invalid username or password";
+            cleartext();
+        }
+        else if (result == "false")
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "Failed to change username";
+            cleartext();
+        }
+        else
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "username successfully changed";
+            accountOption.GetComponentInChildren<TextMeshProUGUI>().text = usernameUpdate.text;
+            cleartext();
+            textNewUsername.SetActive(false);
+            usernameUpdate.gameObject.SetActive(false);
+            gestionPanel.SetActive(false);
+        }
+    }
+
     public void DeleteAccount()
     {
-        if (usernameDelete.text == "" || passwordDelete.text == "")
+        if (usernameGestion.text == "" || passwordGestion.text == "")
         {
             answerPanel.SetActive(true);
             textReturn.text = "please fill all the fields";
@@ -174,7 +261,7 @@ public class Connection : MonoBehaviour
 
     IEnumerator DeleteAccountCoroutine()
     {
-        User deletingUser = new User(usernameDelete.text, passwordDelete.text);
+        User deletingUser = new User(usernameGestion.text, passwordGestion.text);
         string json = JsonUtility.ToJson(deletingUser);
         byte [] data = Encoding.UTF8.GetBytes(json);
         UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion/deleteAccount","DELETE");
