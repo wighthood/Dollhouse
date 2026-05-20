@@ -174,10 +174,10 @@ public class Connection : MonoBehaviour
 
     IEnumerator DeleteAccountCoroutine()
     {
-        User deletingUser = new User(username.text, password.text);
+        User deletingUser = new User(usernameDelete.text, passwordDelete.text);
         string json = JsonUtility.ToJson(deletingUser);
         byte [] data = Encoding.UTF8.GetBytes(json);
-        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/user/delete","POST");
+        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion/deleteAccount","DELETE");
         request.uploadHandler = new UploadHandlerRaw(data);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
@@ -192,6 +192,12 @@ public class Connection : MonoBehaviour
         {
             answerPanel.SetActive(true);
             textReturn.text = "invalid username or password";
+            cleartext();
+        }
+        else if (result == "false")
+        {
+            answerPanel.SetActive(true);
+            textReturn.text = "Failed to delete account";
             cleartext();
         }
         else
