@@ -64,6 +64,16 @@ public class Connection : MonoBehaviour
     [Header("token")]
     [SerializeField] private SessionData SessionData;
 
+    private void cleartext()
+    {
+        username.text = "";
+        password.text = "";
+        passwordVerif.text = "";
+        usernameGestion.text = "";
+        passwordGestion.text = "";
+        usernameUpdate.text = "";
+    }
+    
     public void CreateAccount()
     {
         if (username.text == "" || password.text == "" || passwordVerif.text != password.text)
@@ -82,17 +92,21 @@ public class Connection : MonoBehaviour
         }
         StartCoroutine(CreateAccountCoroutine());
     }
-
-    private void cleartext()
+    
+    IEnumerator CreateAccountCoroutine()
     {
-        username.text = "";
-        password.text = "";
-        passwordVerif.text = "";
-        usernameGestion.text = "";
-        passwordGestion.text = "";
-        usernameUpdate.text = "";
+        User newUser = new User(username.text, password.text);
+        string json = JsonUtility.ToJson(newUser);
+        byte [] data = Encoding.UTF8.GetBytes(json);
+        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion/createAccount","POST");
+        request.uploadHandler = new UploadHandlerRaw(data);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        
+        yield return request.SendWebRequest();
+        AccountCreationResult(request.downloadHandler.text);
     }
-
+    
     private void AccountCreationResult(string result)
     {
         cleartext();
@@ -110,20 +124,6 @@ public class Connection : MonoBehaviour
         buttoncreate.SetActive(true);
     }
     
-    IEnumerator CreateAccountCoroutine()
-    {
-        User newUser = new User(username.text, password.text);
-        string json = JsonUtility.ToJson(newUser);
-        byte [] data = Encoding.UTF8.GetBytes(json);
-        UnityWebRequest request = new UnityWebRequest(APIConfig.API_URL + "/connexion/createAccount","POST");
-        request.uploadHandler = new UploadHandlerRaw(data);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-        
-        yield return request.SendWebRequest();
-        AccountCreationResult(request.downloadHandler.text);
-    }
-
     public void Connect()
     {
         if (username.text == "" || password.text == "")
